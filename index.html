@@ -1,31 +1,21 @@
+<html>
+
 <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
-  <script type="module">
-    import {LitElement, html} from '@polymer/lit-element';
+<script type="module" src="./spoggy-graph.js"></script>
 
-    class MyElement extends LitElement {
+Fichier source au format vis / spoggy (json) : https://raw.githubusercontent.com/scenaristeur/heroku-spoggy/master/public/exemple_files/Spoggy_init2.json
+<spoggy-graph source="https://raw.githubusercontent.com/scenaristeur/heroku-spoggy/master/public/exemple_files/Spoggy_init2.json" ></spoggy-graph>
 
-      static get properties() {
-        return {
-          mood: {type: String}
-        };
-      }
+Fichier source au format RDF / turtle / owl.. : https://protege.stanford.edu/ontologies/pizza/pizza.owl
+<spoggy-graph source="https://protege.stanford.edu/ontologies/pizza/pizza.owl" ></spoggy-graph>
 
-      constructor() {
-        super();
-        this.mood = 'happy';
-      }
+Requete 'SELECT * WHERE {?s ?p ?o}' vers un endpoint Fuseki : http://127.0.0.1:3030/dataset
+<spoggy-graph endpoint="http://127.0.0.1:3030/dataset" endpoint-type="fuseki" query="SELECT * WHERE {?s ?p ?o}" ></spoggy-graph>
 
-      render() {
-        return html`<style> .mood { color: green; } </style>
-          Web Components are <span class="mood">${this.mood}</span>!`;
-      }
+Requete 'SELECT TourEiffel WHERE {?s ?p ?o}' vers un endopoint Virtuoso
+<spoggy-graph  endpoint="http://dbpedia.org/sparql" endpoint-type="virtuoso" query="SELECT TourEiffel WHERE {?s ?p ?o}" ></spoggy-graph>
 
-    }
+Connexion à un graphe collaboratif géré par socket.io
+<spoggy-graph  graph="graphCollaboratifName" ></spoggy-graph>
 
-    customElements.define('my-element', MyElement);
-  </script>
-
-
-<script type="module" src="spoggy-graph.js"></script> 
-  <my-element mood="happy"></my-element>
-  <spoggy-graph mood="Swing Fantadiano"></spoggy-graph>
+</html>

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "@polymer/lit-element": "^0.6.1"
+    "@polymer/lit-element": "^0.6.1",
+    "vis": "^4.21.0"
   },
   "devDependencies": {
     "@webcomponents/webcomponentsjs": "^2.1.3"
