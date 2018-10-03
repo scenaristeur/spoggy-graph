@@ -1,0 +1,31 @@
+<script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+  <script type="module">
+    import {LitElement, html} from '@polymer/lit-element';
+
+    class MyElement extends LitElement {
+
+      static get properties() {
+        return {
+          mood: {type: String}
+        };
+      }
+
+      constructor() {
+        super();
+        this.mood = 'happy';
+      }
+
+      render() {
+        return html`<style> .mood { color: green; } </style>
+          Web Components are <span class="mood">${this.mood}</span>!`;
+      }
+
+    }
+
+    customElements.define('my-element', MyElement);
+  </script>
+
+
+<script type="module" src="spoggy-graph.js"></script> 
+  <my-element mood="happy"></my-element>
+  <spoggy-graph mood="Swing Fantadiano"></spoggy-graph>
