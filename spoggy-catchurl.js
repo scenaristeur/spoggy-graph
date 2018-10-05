@@ -45,7 +45,7 @@ class SpoggyCatchurl extends LitElement {
     MODE : ${_mode} </br>
     <div>${disabled ? 'Off' : 'On'}</div>
     </p>
-    <p>test : http://127.0.0.1:8081/?endpoint=http://127.0.0.1:3030&source=http://test.json&graph=plop&query=SELECT * WHERE {?s ?p ?o}</p>
+    <p>test : http://127.0.0.1:8081/?endpoint=http://127.0.0.1:3030&source=https://raw.githubusercontent.com/scenaristeur/heroku-spoggy/master/public/exemple_files/Spoggy_init2.json&graph=plop&query=SELECT * WHERE {?s ?p ?o}</p>
     </div>
     `;
   }

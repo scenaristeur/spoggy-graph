@@ -2,6 +2,7 @@ import {LitElement, html} from '@polymer/lit-element';
 import 'vis/dist/vis.js';
 import  'evejs/dist/eve.min.js';
 import { GraphAgent } from './agents/GraphAgent.js'
+import { ttl2Xml, rdf2Xml } from './lib/import-export.js'
 
 class SpoggyGraph extends LitElement {
 
@@ -14,10 +15,43 @@ class SpoggyGraph extends LitElement {
       top: 0;
       left: 0;
       width: 100%;
-      height: 90vh;
+      height: 50vh; /*height: 90vh;*/
       bottom: 0px  !important;;
       border: 1px solid lightgray;
       background: linear-gradient(to bottom, rgba(55, 55, 255, 0.2), rgba(200, 200, 10, 0.2));
+    }
+    #operation {
+      font-size:28px;
+    }
+    #node-popUp {
+      display:none;
+    position:absolute;
+    /*  top:350px;
+      left:170px; */
+      z-index:299;
+      width:250px;
+      height:120px;
+      background-color: #f9f9f9;
+      border-style:solid;
+      border-width:3px;
+      border-color: #5394ed;
+      padding:10px;
+      text-align: center;
+    }
+    #edge-popUp {
+      display:none;
+      position:absolute;
+  /*    top:350px;
+      left:170px; */
+      z-index:299;
+      width:250px;
+      height:90px;
+      background-color: #f9f9f9;
+      border-style:solid;
+      border-width:3px;
+      border-color: #5394ed;
+      padding:10px;
+      text-align: center;
     }
 
     div.vis-network div.vis-manipulation {
@@ -208,6 +242,29 @@ class SpoggyGraph extends LitElement {
       right:15px;
     }
     </style>
+    <div id="node-popUp">
+    <span id="node-operation">node</span> <br>
+    <table style="margin:auto;">
+    <tr>
+    <td>id</td><td><input id="node-id" value="" /></td>
+    </tr>
+    <tr>
+    <td>Label</td><td><input id="node-label" value="" autofocus /></td>
+    </tr>
+    </table>
+    <input type="button" value="save" id="node-saveButton" />
+    <input type="button" value="cancel" id="node-cancelButton" />
+    </div>
+
+    <div id="edge-popUp">
+    <span id="edge-operation">edge</span> <br>
+    <table style="margin:auto;">
+    <tr>
+    <td>Label</td><td><input id="edge-label" value="" autofocus /></td>
+    </tr></table>
+    <input type="button" value="save" id="edge-saveButton" />
+    <input type="button" value="cancel" id="edge-cancelButton" />
+    </div>
     <br>
     Source : <span class="source">${this.source}</span>
     <div id="mynetwork"></div>
@@ -233,12 +290,12 @@ class SpoggyGraph extends LitElement {
 
 
   firstUpdated() {
-  //  console.log("vis",vis);
-      console.log('name : ', this.name);
-      console.log('id : ', this.id);
-      this.agentGraph = new GraphAgent(this.name, this);
-      console.log(this.agentGraph);
-      this.agentGraph.send('agentApp', {type: 'dispo', name: this.name });
+    //  console.log("vis",vis);
+    console.log('name : ', this.name);
+    console.log('id : ', this.id);
+    this.agentGraph = new GraphAgent(this.name, this);
+    console.log(this.agentGraph);
+    this.agentGraph.send('agentApp', {type: 'dispo', name: this.name });
     // create a network
     //  var container = document.getElementById('mynetwork');
 
@@ -269,7 +326,7 @@ class SpoggyGraph extends LitElement {
       edges: edges
     };
     var defaultLocal = navigator.language;
-  //  console.log(defaultLocal);
+    //  console.log(defaultLocal);
     //  app.setDefaultLocale();
     var container = this.shadowRoot.getElementById('mynetwork');
 
@@ -323,6 +380,73 @@ class SpoggyGraph extends LitElement {
         console.log('selectNode Event: ', params);
       });
       console.log(app.network)
+    }
+
+
+    editNode(data, cancelAction, callback) {
+      this.shadowRoot.getElementById('node-label').value = data.label ;
+      this.shadowRoot.getElementById('node-saveButton').onclick = this.saveNodeData.bind(this, data, callback);
+      this.shadowRoot.getElementById('node-cancelButton').onclick = cancelAction.bind(this, callback);
+      this.shadowRoot.getElementById('node-popUp').style.display = 'block';
+    }
+
+    // Callback passed as parameter is ignored
+    clearNodePopUp() {
+      this.shadowRoot.getElementById('node-saveButton').onclick = null;
+      this.shadowRoot.getElementById('node-cancelButton').onclick = null;
+      this.shadowRoot.getElementById('node-popUp').style.display = 'none';
+    }
+
+    cancelNodeEdit(callback) {
+      this.clearNodePopUp();
+      callback(null);
+    }
+
+    saveNodeData(data, callback) {
+      data.label =  this.shadowRoot.getElementById('node-label').value;
+      this.clearNodePopUp();
+      callback(data);
+    }
+
+    editEdgeWithoutDrag(data, callback) {
+      // filling in the popup DOM elements
+      this.shadowRoot.getElementById('edge-label').value = data.label || "";
+      this.shadowRoot.getElementById('edge-saveButton').onclick = this.saveEdgeData.bind(this, data, callback);
+      this.shadowRoot.getElementById('edge-cancelButton').onclick = this.cancelEdgeEdit.bind(this,callback);
+      this.shadowRoot.getElementById('edge-popUp').style.display = 'block';
+    }
+
+    clearEdgePopUp() {
+      this.shadowRoot.getElementById('edge-saveButton').onclick = null;
+      this.shadowRoot.getElementById('edge-cancelButton').onclick = null;
+      this.shadowRoot.getElementById('edge-popUp').style.display = 'none';
+    }
+
+    cancelEdgeEdit(callback) {
+      this.clearEdgePopUp();
+      callback(null);
+    }
+
+    saveEdgeData(data, callback) {
+      if (typeof data.to === 'object')
+      data.to = data.to.id
+      if (typeof data.from === 'object')
+      data.from = data.from.id
+      data.label = this.shadowRoot.getElementById('edge-label').value;
+      this.clearEdgePopUp();
+      callback(data);
+    }
+
+    setDefaultLocale() {
+      var defaultLocal = navigator.language;
+      var select = this.shadowRoot.getElementById('locale');
+      select.selectedIndex = 0; // set fallback value
+      for (var i = 0, j = select.options.length; i < j; ++i) {
+        if (select.options[i].getAttribute('value') === defaultLocal) {
+          select.selectedIndex = i;
+          break;
+        }
+      }
     }
 
 

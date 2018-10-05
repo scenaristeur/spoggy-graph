@@ -1,65 +1,8 @@
 <html>
 
-<script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+<!--<script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>-->
+<!--<script src="node_modules/evejs/dist/eve.js"></script>-->
 <script type="module" src="./spoggy-app.js"></script>
-<script type="module" src="./spoggy-catchurl.js"></script>
-<script type="module" src="./spoggy-graph.js"></script>
 
-
-
-<table border="1">
-  <th>
-    DEMO SPOGGY-GRAPH
-  </th>
-  <tr>
-    <td>Fichier source au format vis / spoggy (json) :<br>
-      https://raw.githubusercontent.com/scenaristeur/heroku-spoggy/master/public/exemple_files/Spoggy_init2.json</td>
-      <td><spoggy-graph id="jsongraphID" name="jsongraph-name" source="https://raw.githubusercontent.com/scenaristeur/heroku-spoggy/master/public/exemple_files/Spoggy_init2.json" ></spoggy-graph></td>
-    </tr>
-    <tr>
-      <td>
-        Fichier source au format RDF / turtle / owl.. :<br>
-        https://protege.stanford.edu/ontologies/pizza/pizza.owl
-      </td>
-      <td>
-        <spoggy-graph id="rdfgraph" name="jsongraph" source="https://protege.stanford.edu/ontologies/pizza/pizza.owl" ></spoggy-graph>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        Requete 'SELECT * WHERE {?s ?p ?o}' vers un endpoint Fuseki :<br>
-        http://127.0.0.1:3030/dataset
-      </td>
-      <td>
-        <spoggy-graph id="endpointFuseki" name="endpointFuseki" endpoint="http://127.0.0.1:3030/dataset" endpoint-type="fuseki" query="SELECT * WHERE {?s ?p ?o}" ></spoggy-graph>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        Requete 'SELECT TourEiffel WHERE {?s ?p ?o}' vers un endopoint Virtuoso
-      </td>
-      <td>
-        <spoggy-graph id="endpointVirtuoso" name="endpointVirtuoso" endpoint="http://dbpedia.org/sparql" endpoint-type="virtuoso" query="SELECT TourEiffel WHERE {?s ?p ?o}" ></spoggy-graph>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        Connexion à un graphe collaboratif géré par socket.io
-      </td>
-      <td>
-        <spoggy-graph id="grapheCollaboratif" name="grapheCollaboratif" graph="graphCollaboratifName" ></spoggy-graph>
-      </td>
-    </tr>
-  </table>
-
-  <spoggy-catchurl></spoggy-catchurl>
-  <spoggy-app></spoggy-app>
-
-
-
-
-
-
-
-
-  </html>
+<spoggy-app></spoggy-app>
+</html>
