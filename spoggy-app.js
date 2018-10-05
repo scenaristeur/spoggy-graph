@@ -1,4 +1,6 @@
 import { LitElement, html } from '@polymer/lit-element';
+import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-button/paper-button.js';
 import  'evejs/dist/eve.min.js';
 import { AppAgent } from './agents/AppAgent.js';
 
@@ -17,8 +19,18 @@ class SpoggyApp extends LitElement {
         DEMO SPOGGY-GRAPH
       </th>
       <tr>
-        <td>Fichier source au format vis / spoggy (json) :<br>
-          https://raw.githubusercontent.com/scenaristeur/heroku-spoggy/master/public/exemple_files/Spoggy_init2.json</td>
+        <td><br>
+
+          <br>
+          <paper-input
+           label="Fichier source au format vis / spoggy (json) :"
+           value="https://raw.githubusercontent.com/scenaristeur/heroku-spoggy/master/public/exemple_files/Spoggy_init2.json">
+           </paper-input><paper-button raised >Charger</paper-button>
+           <br>
+           ou
+          <paper-button raised>Parcourir</paper-button>
+
+          </td>
           <td>
             <spoggy-graph id="jsongraphID" name="jsongraph-name" source="https://raw.githubusercontent.com/scenaristeur/heroku-spoggy/master/public/exemple_files/Spoggy_init2.json" >
             Chargement du graphe
