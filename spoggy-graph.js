@@ -1,12 +1,14 @@
 import {LitElement, html} from '@polymer/lit-element';
 import 'vis/dist/vis.js';
+import  'evejs/dist/eve.min.js';
+import { GraphAgent } from './agents/GraphAgent.js'
 
 class SpoggyGraph extends LitElement {
 
   render() {
     return html`
     <style>
-    .mood { color: green; }
+    .source { color: green; }
 
     #mynetwork {
       top: 0;
@@ -207,7 +209,7 @@ class SpoggyGraph extends LitElement {
     }
     </style>
     <br>
-    Source : ${this.source}
+    Source : <span class="source">${this.source}</span>
     <div id="mynetwork"></div>
 
     `;
@@ -216,23 +218,27 @@ class SpoggyGraph extends LitElement {
 
   static get properties() {
     return {
-      source: {type: String}
+      id: {type: String},
+      name: {type: String},
+      source: {type: String},
     };
   }
 
   constructor() {
     super();
-    this.source = "blop";
-
+    this.id = "noid";
+    this.name = "anonymous";
+    this.source = "nosource";
   }
 
 
   firstUpdated() {
-    console.log("vis",vis);
-    //  console.log("eve",eve);
-    //  this.agentGraph = new GraphAgent('agentGraph', this);
-    //  console.log(this.agentGraph);
-    //  this.agentGraph.send('agentApp', {type: 'dispo', name: 'agentGraph' });
+  //  console.log("vis",vis);
+      console.log('name : ', this.name);
+      console.log('id : ', this.id);
+      this.agentGraph = new GraphAgent(this.name, this);
+      console.log(this.agentGraph);
+      this.agentGraph.send('agentApp', {type: 'dispo', name: this.name });
     // create a network
     //  var container = document.getElementById('mynetwork');
 
@@ -263,7 +269,7 @@ class SpoggyGraph extends LitElement {
       edges: edges
     };
     var defaultLocal = navigator.language;
-    console.log(defaultLocal);
+  //  console.log(defaultLocal);
     //  app.setDefaultLocale();
     var container = this.shadowRoot.getElementById('mynetwork');
 

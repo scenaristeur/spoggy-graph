@@ -1,6 +1,6 @@
 # source https://github.com/Polymer/lit-element
 
-
+Polymer3 element pour Spoggy3 https://github.com/scenaristeur/spoggy3
 
 
     Add LitElement to your project:
