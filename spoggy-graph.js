@@ -7,6 +7,7 @@ import { ttl2Xml, rdf2Xml } from './lib/import-export.js'
 class SpoggyGraph extends LitElement {
 
   render() {
+    const { data } = this;
     return html`
     <style>
     .source { color: green; }
@@ -25,8 +26,8 @@ class SpoggyGraph extends LitElement {
     }
     #node-popUp {
       display:none;
-    position:absolute;
-    /*  top:350px;
+      position:absolute;
+      /*  top:350px;
       left:170px; */
       z-index:299;
       width:250px;
@@ -41,7 +42,7 @@ class SpoggyGraph extends LitElement {
     #edge-popUp {
       display:none;
       position:absolute;
-  /*    top:350px;
+      /*    top:350px;
       left:170px; */
       z-index:299;
       width:250px;
@@ -242,6 +243,10 @@ class SpoggyGraph extends LitElement {
       right:15px;
     }
     </style>
+
+
+
+
     <div id="node-popUp">
     <span id="node-operation">node</span> <br>
     <table style="margin:auto;">
@@ -267,8 +272,8 @@ class SpoggyGraph extends LitElement {
     </div>
     <br>
     Source : <span class="source">${this.source}</span>
-    <div id="mynetwork"></div>
 
+    <div id="mynetwork"></div>
     `;
   }
 
@@ -278,6 +283,7 @@ class SpoggyGraph extends LitElement {
       id: {type: String},
       name: {type: String},
       source: {type: String},
+      data: {type: Object}
     };
   }
 
@@ -288,168 +294,196 @@ class SpoggyGraph extends LitElement {
     this.source = "nosource";
   }
 
+  updated(data){
+    //  super.updated(data)
+    console.log("UPDATE DATA");
+    /*var dataset =  JSON.stringify(eval("(" + this.data + ")"));
+    if (dataset != undefined){
+    console.log(dataset)
+    console.log(this.network)
+    var nodes = dataset.nodes;
+    var edges = dataset.edges;
+    console.log(nodes);
+    console.log(edges);
+    this.network.body.data.nodes.update(nodes);
+    this.network.body.data.edges.update(edges);
+  }*/
 
-  firstUpdated() {
-    //  console.log("vis",vis);
-    console.log('name : ', this.name);
-    console.log('id : ', this.id);
-    this.agentGraph = new GraphAgent(this.name, this);
-    console.log(this.agentGraph);
-    this.agentGraph.send('agentApp', {type: 'dispo', name: this.name });
-    // create a network
-    //  var container = document.getElementById('mynetwork');
+}
 
-    var seed = 2;
-    var app = this;
+update(data) {
+  super.update(data);
+  console.log('updated!', data);
+  var dataset =  JSON.stringify(eval("(" + this.data + ")"));
+  if (dataset != undefined){
+    dataset = JSON.parse(dataset);
+    this.network.body.data.nodes.update(dataset.nodes);
+    this.network.body.data.edges.update(dataset.edges);
+  }
+}
 
-    // create an array with nodes
-    var nodes = new vis.DataSet([
-      {id: 1, label: 'Node 1'},
-      {id: 2, label: 'Node 2'},
-      {id: 3, label: 'Node 3'},
-      {id: 4, label: 'Node 4'},
-      {id: 5, label: 'Node 5'}
-    ]);
+firstUpdated() {
+  //  super.firstUpdated()
+  //  console.log("vis",vis);
+  console.log('name : ', this.name);
+  console.log('id : ', this.id);
+  this.agentGraph = new GraphAgent(this.name, this);
+  console.log(this.agentGraph);
+  this.agentGraph.send('agentApp', {type: 'dispo', name: this.name });
+  // create a network
+  //  var container = document.getElementById('mynetwork');
 
-    // create an array with edges
-    var edges = new vis.DataSet([
-      {from: 1, to: 3, arrows:'to'},
-      {from: 1, to: 2, arrows:'to'},
-      {from: 2, to: 4, arrows:'to'},
-      {from: 2, to: 5, arrows:'to'},
-      {from: 3, to: 3, arrows:'to'}
-    ]);
+  var seed = 2;
+  var app = this;
+
+  // create an array with nodes
+  var nodes = new vis.DataSet([
+    {id: 1, label: 'Node 1'},
+    {id: 2, label: 'Node 22'},
+    {id: 3, label: 'Node 3'},
+    {id: 4, label: 'Node 4'},
+    {id: 5, label: 'Node 5'}
+  ]);
+
+  // create an array with edges
+  var edges = new vis.DataSet([
+    {from: 1, to: 3, arrows:'to'},
+    {from: 1, to: 2, arrows:'to'},
+    {from: 2, to: 4, arrows:'to'},
+    {from: 2, to: 5, arrows:'to'},
+    {from: 3, to: 3, arrows:'to'}
+  ]);
 
 
-    var data = {
-      nodes: nodes,
-      edges: edges
-    };
-    var defaultLocal = navigator.language;
-    //  console.log(defaultLocal);
-    //  app.setDefaultLocale();
-    var container = this.shadowRoot.getElementById('mynetwork');
+  var data = {
+    nodes: nodes,
+    edges: edges
+  };
+  var defaultLocal = navigator.language;
+  //  console.log(defaultLocal);
+  //  app.setDefaultLocale();
+  var container = this.shadowRoot.getElementById('mynetwork');
 
-    var options = {
-      layout: {randomSeed:seed}, // just to make sure the layout is the same when the locale is changed
-      //  locale: this._root.querySelector('#locale').value,
-      edges:{
-        arrows: {
-          to:     {enabled: true, scaleFactor:1, type:'arrow'},
-          middle: {enabled: false, scaleFactor:1, type:'arrow'},
-          from:   {enabled: false, scaleFactor:1, type:'arrow'}
-        }},
-        interaction:{
-          navigationButtons: true,
-          //  keyboard: true  //incompatible avec rappel de commande en cours d'implémentation
-          multiselect: true,
+  var options = {
+    layout: {randomSeed:seed}, // just to make sure the layout is the same when the locale is changed
+    //  locale: this._root.querySelector('#locale').value,
+    edges:{
+      arrows: {
+        to:     {enabled: true, scaleFactor:1, type:'arrow'},
+        middle: {enabled: false, scaleFactor:1, type:'arrow'},
+        from:   {enabled: false, scaleFactor:1, type:'arrow'}
+      }},
+      interaction:{
+        navigationButtons: true,
+        //  keyboard: true  //incompatible avec rappel de commande en cours d'implémentation
+        multiselect: true,
+      },
+      manipulation: {
+        addNode: function (data, callback) {
+          // filling in the popup DOM elements
+          app.shadowRoot.getElementById('node-operation').innerHTML = "Add Node";
+          app.editNode(data, app.clearNodePopUp, callback);
         },
-        manipulation: {
-          addNode: function (data, callback) {
-            // filling in the popup DOM elements
-            app.shadowRoot.getElementById('node-operation').innerHTML = "Add Node";
-            app.editNode(data, app.clearNodePopUp, callback);
-          },
-          editNode: function (data, callback) {
-            // filling in the popup DOM elements
-            app.shadowRoot.getElementById('node-operation').innerHTML = "Edit Node";
-            app.editNode(data, app.cancelNodeEdit, callback);
-          },
-          addEdge: function (data, callback) {
-            if (data.from == data.to) {
-              var r = confirm("Do you want to connect the node to itself?");
-              if (r != true) {
-                callback(null);
-                return;
-              }
-            }
-            app.shadowRoot.getElementById('edge-operation').innerHTML = "Add Edge";
-            app.editEdgeWithoutDrag(data, callback);
-          },
-          editEdge: {
-            editWithoutDrag: function(data, callback) {
-              app.shadowRoot.getElementById('edge-operation').innerHTML = "Edit Edge";
-              app.editEdgeWithoutDrag(data,callback);
+        editNode: function (data, callback) {
+          // filling in the popup DOM elements
+          app.shadowRoot.getElementById('node-operation').innerHTML = "Edit Node";
+          app.editNode(data, app.cancelNodeEdit, callback);
+        },
+        addEdge: function (data, callback) {
+          if (data.from == data.to) {
+            var r = confirm("Do you want to connect the node to itself?");
+            if (r != true) {
+              callback(null);
+              return;
             }
           }
-        }
-      };
-
-      app.network = new vis.Network(container, data, options);
-      app.network.on("selectNode", function (params) {
-        console.log('selectNode Event: ', params);
-      });
-      console.log(app.network)
-    }
-
-
-    editNode(data, cancelAction, callback) {
-      this.shadowRoot.getElementById('node-label').value = data.label ;
-      this.shadowRoot.getElementById('node-saveButton').onclick = this.saveNodeData.bind(this, data, callback);
-      this.shadowRoot.getElementById('node-cancelButton').onclick = cancelAction.bind(this, callback);
-      this.shadowRoot.getElementById('node-popUp').style.display = 'block';
-    }
-
-    // Callback passed as parameter is ignored
-    clearNodePopUp() {
-      this.shadowRoot.getElementById('node-saveButton').onclick = null;
-      this.shadowRoot.getElementById('node-cancelButton').onclick = null;
-      this.shadowRoot.getElementById('node-popUp').style.display = 'none';
-    }
-
-    cancelNodeEdit(callback) {
-      this.clearNodePopUp();
-      callback(null);
-    }
-
-    saveNodeData(data, callback) {
-      data.label =  this.shadowRoot.getElementById('node-label').value;
-      this.clearNodePopUp();
-      callback(data);
-    }
-
-    editEdgeWithoutDrag(data, callback) {
-      // filling in the popup DOM elements
-      this.shadowRoot.getElementById('edge-label').value = data.label || "";
-      this.shadowRoot.getElementById('edge-saveButton').onclick = this.saveEdgeData.bind(this, data, callback);
-      this.shadowRoot.getElementById('edge-cancelButton').onclick = this.cancelEdgeEdit.bind(this,callback);
-      this.shadowRoot.getElementById('edge-popUp').style.display = 'block';
-    }
-
-    clearEdgePopUp() {
-      this.shadowRoot.getElementById('edge-saveButton').onclick = null;
-      this.shadowRoot.getElementById('edge-cancelButton').onclick = null;
-      this.shadowRoot.getElementById('edge-popUp').style.display = 'none';
-    }
-
-    cancelEdgeEdit(callback) {
-      this.clearEdgePopUp();
-      callback(null);
-    }
-
-    saveEdgeData(data, callback) {
-      if (typeof data.to === 'object')
-      data.to = data.to.id
-      if (typeof data.from === 'object')
-      data.from = data.from.id
-      data.label = this.shadowRoot.getElementById('edge-label').value;
-      this.clearEdgePopUp();
-      callback(data);
-    }
-
-    setDefaultLocale() {
-      var defaultLocal = navigator.language;
-      var select = this.shadowRoot.getElementById('locale');
-      select.selectedIndex = 0; // set fallback value
-      for (var i = 0, j = select.options.length; i < j; ++i) {
-        if (select.options[i].getAttribute('value') === defaultLocal) {
-          select.selectedIndex = i;
-          break;
+          app.shadowRoot.getElementById('edge-operation').innerHTML = "Add Edge";
+          app.editEdgeWithoutDrag(data, callback);
+        },
+        editEdge: {
+          editWithoutDrag: function(data, callback) {
+            app.shadowRoot.getElementById('edge-operation').innerHTML = "Edit Edge";
+            app.editEdgeWithoutDrag(data,callback);
+          }
         }
       }
-    }
+    };
 
-
+    app.network = new vis.Network(container, data, options);
+    app.network.on("selectNode", function (params) {
+      console.log('selectNode Event: ', params);
+    });
+    console.log(app.network)
   }
 
-  customElements.define('spoggy-graph', SpoggyGraph);
+
+  editNode(data, cancelAction, callback) {
+    this.shadowRoot.getElementById('node-label').value = data.label ;
+    this.shadowRoot.getElementById('node-saveButton').onclick = this.saveNodeData.bind(this, data, callback);
+    this.shadowRoot.getElementById('node-cancelButton').onclick = cancelAction.bind(this, callback);
+    this.shadowRoot.getElementById('node-popUp').style.display = 'block';
+  }
+
+  // Callback passed as parameter is ignored
+  clearNodePopUp() {
+    this.shadowRoot.getElementById('node-saveButton').onclick = null;
+    this.shadowRoot.getElementById('node-cancelButton').onclick = null;
+    this.shadowRoot.getElementById('node-popUp').style.display = 'none';
+  }
+
+  cancelNodeEdit(callback) {
+    this.clearNodePopUp();
+    callback(null);
+  }
+
+  saveNodeData(data, callback) {
+    data.label =  this.shadowRoot.getElementById('node-label').value;
+    this.clearNodePopUp();
+    callback(data);
+  }
+
+  editEdgeWithoutDrag(data, callback) {
+    // filling in the popup DOM elements
+    this.shadowRoot.getElementById('edge-label').value = data.label || "";
+    this.shadowRoot.getElementById('edge-saveButton').onclick = this.saveEdgeData.bind(this, data, callback);
+    this.shadowRoot.getElementById('edge-cancelButton').onclick = this.cancelEdgeEdit.bind(this,callback);
+    this.shadowRoot.getElementById('edge-popUp').style.display = 'block';
+  }
+
+  clearEdgePopUp() {
+    this.shadowRoot.getElementById('edge-saveButton').onclick = null;
+    this.shadowRoot.getElementById('edge-cancelButton').onclick = null;
+    this.shadowRoot.getElementById('edge-popUp').style.display = 'none';
+  }
+
+  cancelEdgeEdit(callback) {
+    this.clearEdgePopUp();
+    callback(null);
+  }
+
+  saveEdgeData(data, callback) {
+    if (typeof data.to === 'object')
+    data.to = data.to.id
+    if (typeof data.from === 'object')
+    data.from = data.from.id
+    data.label = this.shadowRoot.getElementById('edge-label').value;
+    this.clearEdgePopUp();
+    callback(data);
+  }
+
+  setDefaultLocale() {
+    var defaultLocal = navigator.language;
+    var select = this.shadowRoot.getElementById('locale');
+    select.selectedIndex = 0; // set fallback value
+    for (var i = 0, j = select.options.length; i < j; ++i) {
+      if (select.options[i].getAttribute('value') === defaultLocal) {
+        select.selectedIndex = i;
+        break;
+      }
+    }
+  }
+
+
+}
+
+customElements.define('spoggy-graph', SpoggyGraph);
