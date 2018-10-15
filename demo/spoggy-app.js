@@ -28,10 +28,10 @@ class SpoggyApp extends LitElement {
     <th>
     DEMO SPOGGY-GRAPH
     </th>
-    <tr>
-    <td><br>
 
-    <br>
+
+    <tr>
+    <td>
     Chargement d'un fichier source au format vis / spoggy (json)
     <paper-input
     id="inputJson"
@@ -41,7 +41,7 @@ class SpoggyApp extends LitElement {
     <paper-button raised @click="${(e) =>  this._load_json(e)}">Charger</paper-button>
     <br>
     ou
-    <paper-button raised>Parcourir</paper-button>
+    <paper-button raised>Parcourir (en cours)</paper-button>
     </td>
     <td>
     <spoggy-graph id="jsongraphID" name="jsongraph-name" data="${jsonData}" source="https://raw.githubusercontent.com/scenaristeur/heroku-spoggy/master/public/exemple_files/Spoggy_init2.json" >
@@ -49,10 +49,20 @@ class SpoggyApp extends LitElement {
     </spoggy-graph>
     </td>
     </tr>
+
+
     <tr>
     <td>
-    Fichier source au format RDF / turtle / owl.. :<br>
-    https://protege.stanford.edu/ontologies/pizza/pizza.owl
+    Chargement d'un fichier source au format RDF / turtle / owl.. :<br>
+    <paper-input
+    id="inputRdf"
+    label="Fichier source au format RDF / turtle / owl.. :"
+    value="https://protege.stanford.edu/ontologies/pizza/pizza.owl">
+    </paper-input>
+    <paper-button raised @click="${(e) =>  this._load_rdf(e)}">Charger</paper-button>
+
+
+
     </td>
     <td>
     <spoggy-graph id="rdfgraph" name="jsongraph" source="https://protege.stanford.edu/ontologies/pizza/pizza.owl" >
@@ -60,6 +70,8 @@ class SpoggyApp extends LitElement {
     </spoggy-graph>
     </td>
     </tr>
+
+
     <tr>
     <td>
     Requete 'SELECT * WHERE {?s ?p ?o}' vers un endpoint Fuseki :<br>
@@ -71,6 +83,8 @@ class SpoggyApp extends LitElement {
     </spoggy-graph>
     </td>
     </tr>
+
+
     <tr>
     <td>
     Requete 'SELECT TourEiffel WHERE {?s ?p ?o}' vers un endopoint Virtuoso
@@ -81,6 +95,8 @@ class SpoggyApp extends LitElement {
     </spoggy-graph>
     </td>
     </tr>
+
+
     <tr>
     <td>
     Connexion à un graphe collaboratif géré par socket.io
@@ -91,6 +107,8 @@ class SpoggyApp extends LitElement {
     </spoggy-graph>
     </td>
     </tr>
+
+
     </table>
     <spoggy-catchurl></spoggy-catchurl>
     `;
@@ -120,6 +138,7 @@ class SpoggyApp extends LitElement {
     //  this.agentApp.send('agentApp', {type: 'dispo', name: 'agentGraph' });
     this._ajax = this.shadowRoot.getElementById('request');
     this._inputJson = this.shadowRoot.getElementById('inputJson');
+    this._inputRdf = this.shadowRoot.getElementById('inputRdf');
   }
 
   _load_json(e){
@@ -169,6 +188,57 @@ _handleResponse(data){
 _handleErrorResponse(data){
   console.log(data)
 }
+
+
+
+_load_rdf(e){
+  console.log(e);
+  console.log(this._inputRdf.value);
+  this._ajax.url = this._inputRdf.value;
+  console.log(this._ajax);
+  //  this._ajax.generateRequest();
+  /*
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', this._ajax.url, true);
+  xhr.withCredentials = true;
+  xhr.onreadystatechange = function() {
+  if(xhr.readyState == 4 && xhr.status == 200) {
+  console.log(xhr.responseText);
+  // Get header from php server request if you want for something
+  var cookie = xhr.getResponseHeader("Cookie");
+  // alert("Cookie: " + cookie);
+}else{
+console.log("error ", xhr.responseText)
+}
+}
+xhr.send();
+*/
+var app = this;
+let request = this._ajax.generateRequest();
+request.completes.then(function(request) {
+// succesful request, argument is iron-request element
+var rep = request.response;
+console.log(rep);
+app._handleResponse(rep);
+}, function(rejected) {
+// failed request, argument is an object
+let req = rejected.request;
+let error = rejected.error;
+console.log("error", error)
+}
+)
+}
+
+
+
+
+
+
+
+
+
+
+
 
 }
 

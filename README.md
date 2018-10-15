@@ -13,7 +13,7 @@ polymer serve --open
 
 # launch DEV Server
 ```
-polymer serve 
+polymer serve
 ```
 
 
@@ -50,7 +50,7 @@ polymer serve
     ```
 
 
-
+githubpages & releases https://www.polymer-project.org/1.0/docs/tools/reusable-elements obsolète
 
 si pb EACCESS lors de l'install de Polymer
 sudo npm i -g polymer-cli --unsafe-perm
