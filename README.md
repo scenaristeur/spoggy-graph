@@ -56,3 +56,5 @@ si pb EACCESS lors de l'install de Polymer
 sudo npm i -g polymer-cli --unsafe-perm
 
 TODO ajouter demo a githubpages : https://github.com/zellwk/chatapp-polymer/blob/master/docs/deploy-to-github-pages.md
+
+# rdf-ext https://github.com/rdf-ext/documentation

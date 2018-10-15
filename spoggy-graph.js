@@ -245,8 +245,6 @@ class SpoggyGraph extends LitElement {
     </style>
 
 
-
-
     <div id="node-popUp">
     <span id="node-operation">node</span> <br>
     <table style="margin:auto;">
@@ -280,23 +278,23 @@ class SpoggyGraph extends LitElement {
 
   static get properties() {
     return {
-      id: {type: String},
-      name: {type: String},
-      source: {type: String},
-      data: {type: Object}
+      id: {type: String, value:""},
+      name: {type: String, value: ""},
+      source: {type: String, value: ""},
+      data: {type: Object, value: {}}
     };
   }
 
   constructor() {
     super();
-    this.id = "noid";
-    this.name = "anonymous";
-    this.source = "nosource";
+  //  this.id = "noid";
+  //  this.name = "anonymous";
+  //  this.source = "nosource";
   }
 
   updated(data){
     //  super.updated(data)
-    console.log("UPDATE DATA");
+    console.log("UPDATE DATA", data);
     /*var dataset =  JSON.stringify(eval("(" + this.data + ")"));
     if (dataset != undefined){
     console.log(dataset)
@@ -325,10 +323,9 @@ update(data) {
 firstUpdated() {
   //  super.firstUpdated()
   //  console.log("vis",vis);
-  console.log('name : ', this.name);
-  console.log('id : ', this.id);
+  console.log('------------name : ', this.name, 'id : ', this.id);
   this.agentGraph = new GraphAgent(this.name, this);
-  console.log(this.agentGraph);
+//  console.log(this.agentGraph);
   this.agentGraph.send('agentApp', {type: 'dispo', name: this.name });
   // create a network
   //  var container = document.getElementById('mynetwork');
