@@ -1,6 +1,28 @@
+# Polymer3 element pour Spoggy3 https://github.com/scenaristeur/spoggy3
+```
+git clone https://github.com/scenaristeur/spoggy-graph.git
+cd spoggy-graph
+npm install
+
+```
+
+# launch DEMO
+```
+polymer serve --open
+```
+
+# launch DEV Server
+```
+polymer serve 
+```
+
+
+
+
+
 # source https://github.com/Polymer/lit-element
 
-Polymer3 element pour Spoggy3 https://github.com/scenaristeur/spoggy3
+
 
 
     Add LitElement to your project:
@@ -20,6 +42,13 @@ Polymer3 element pour Spoggy3 https://github.com/scenaristeur/spoggy3
     Run the development server and open a browser pointing to its URL:
 
     polymer serve
+
+
+    * lancer la demo
+    ```
+    polymer serve --open
+    ```
+
 
 
 

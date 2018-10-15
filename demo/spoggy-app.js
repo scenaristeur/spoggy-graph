@@ -3,10 +3,10 @@ import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-ajax/iron-ajax.js';
 import  'evejs/dist/eve.min.js';
-import { AppAgent } from './agents/AppAgent.js';
+import { AppAgent } from '../agents/AppAgent.js';
 
-import "./spoggy-catchurl.js";
-import "./spoggy-graph.js";
+import "../spoggy-catchurl.js";
+import "../spoggy-graph.js";
 
 
 class SpoggyApp extends LitElement {
@@ -22,7 +22,7 @@ class SpoggyApp extends LitElement {
     </iron-ajax>
 
 
-    SPOGGY3-GRAPH
+    SPOGGY3-GRAPH <a href="https://github.com/scenaristeur/spoggy-graph" target="_blank">github</a>
 
     <table border="1">
     <th>
@@ -32,6 +32,7 @@ class SpoggyApp extends LitElement {
     <td><br>
 
     <br>
+    Chargement d'un fichier source au format vis / spoggy (json)
     <paper-input
     id="inputJson"
     label="Fichier source au format vis / spoggy (json) :"
