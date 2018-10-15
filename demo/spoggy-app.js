@@ -21,6 +21,13 @@ class SpoggyApp extends LitElement {
     debounce-duration="300">
     </iron-ajax>
 
+    <iron-ajax
+    id="requestRdf"
+    url="unknown"
+    handle-as="text"
+    debounce-duration="300">
+    </iron-ajax>
+
 
     SPOGGY3-GRAPH <a href="https://github.com/scenaristeur/spoggy-graph" target="_blank">github</a>
 
@@ -54,10 +61,11 @@ class SpoggyApp extends LitElement {
     <tr>
     <td>
     Chargement d'un fichier source au format RDF / turtle / owl.. :<br>
+    copie de https://protege.stanford.edu/ontologies/pizza/pizza.owl
     <paper-input
     id="inputRdf"
     label="Fichier source au format RDF / turtle / owl.. :"
-    value="https://protege.stanford.edu/ontologies/pizza/pizza.owl">
+    value="https://raw.githubusercontent.com/scenaristeur/spoggy-graph/master/data/pizza.owl">
     </paper-input>
     <paper-button raised @click="${(e) =>  this._load_rdf(e)}">Charger</paper-button>
 
@@ -139,6 +147,7 @@ class SpoggyApp extends LitElement {
     this._ajax = this.shadowRoot.getElementById('request');
     this._inputJson = this.shadowRoot.getElementById('inputJson');
     this._inputRdf = this.shadowRoot.getElementById('inputRdf');
+    this._ajaxRdf = this.shadowRoot.getElementById('requestRdf');
   }
 
   _load_json(e){
@@ -194,8 +203,8 @@ _handleErrorResponse(data){
 _load_rdf(e){
   console.log(e);
   console.log(this._inputRdf.value);
-  this._ajax.url = this._inputRdf.value;
-  console.log(this._ajax);
+  this._ajaxRdf.url = this._inputRdf.value;
+  console.log(this._ajaxRdf);
   //  this._ajax.generateRequest();
   /*
   var xhr = new XMLHttpRequest();
@@ -214,21 +223,30 @@ console.log("error ", xhr.responseText)
 xhr.send();
 */
 var app = this;
-let request = this._ajax.generateRequest();
+let request = this._ajaxRdf.generateRequest();
 request.completes.then(function(request) {
-// succesful request, argument is iron-request element
-var rep = request.response;
-console.log(rep);
-app._handleResponse(rep);
+  // succesful request, argument is iron-request element
+  var rep = request.response;
+  console.log(rep);
+  app._handleResponseRdf(rep);
 }, function(rejected) {
-// failed request, argument is an object
-let req = rejected.request;
-let error = rejected.error;
-console.log("error", error)
+  // failed request, argument is an object
+  let req = rejected.request;
+  let error = rejected.error;
+  console.log("error", error)
 }
 )
 }
 
+_handleResponseRdf(data){
+  console.log(data);
+  //this.jsonData = JSON.stringify(data);
+
+}
+
+_handleErrorResponseRdf(data){
+  console.log(data)
+}
 
 
 
