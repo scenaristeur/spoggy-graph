@@ -7,12 +7,13 @@ import { AppAgent } from '../agents/AppAgent.js';
 
 import "../spoggy-catchurl.js";
 import "../spoggy-graph.js";
+import "../spoggy-fuseki.js";
 
 
 
 class SpoggyApp extends LitElement {
   render() {
-    const { _endpoint, _dataset, _query, _graph, _source, _mode, disabled, jsonData } = this;
+    const { endpoint, dataset, query, _graph, _source, _mode, disabled, jsonData } = this;
     return html`
 
     <iron-ajax
@@ -21,6 +22,8 @@ class SpoggyApp extends LitElement {
     handle-as="json"
     debounce-duration="300">
     </iron-ajax>
+
+
 
     <iron-ajax
     id="requestRdf"
@@ -47,9 +50,9 @@ class SpoggyApp extends LitElement {
     value="https://raw.githubusercontent.com/scenaristeur/heroku-spoggy/master/public/exemple_files/Spoggy_init2.json">
     </paper-input>
     <paper-button raised @click="${(e) =>  this._load_json(e)}">Charger</paper-button>
-    <br>
+    <!--<br>
     ou
-    <paper-button raised>Parcourir (en cours)</paper-button>
+    <paper-button raised>Parcourir (en cours)</paper-button>-->
     </td>
     <td>
     <spoggy-graph id="jsongraphID" name="jsongraph-name" data="${jsonData}" source="https://raw.githubusercontent.com/scenaristeur/heroku-spoggy/master/public/exemple_files/Spoggy_init2.json" >
@@ -65,7 +68,35 @@ class SpoggyApp extends LitElement {
     <tr>
     <td>
     Requete 'SELECT * WHERE {?s ?p ?o}' vers un endpoint Fuseki :<br>
-    http://127.0.0.1:3030/dataset
+    <paper-input
+    id="inputFusekiEndpoint"
+    label="Fuseki Sparql Endpoint"
+    value="http://127.0.0.1:3030">
+    </paper-input>
+
+    <paper-input
+    id="inputFusekiDataset"
+    label="Fuseki Sparql Dataset"
+    value="test">
+    </paper-input>
+
+
+    <paper-input
+    id="inputFusekiQuery"
+    label="Fuseki Sparql Query"
+    value="SELECT * WHERE {?s ?p ?o}">
+    </paper-input>
+
+    <paper-button raised @click="${(e) =>  this._load_fuseki(e)}">Charger</paper-button>
+    <br><br><br>
+
+    <small>
+    todo :  (recupérer les datasets)<br>
+    <a href="http://jena.apache.org/documentation/fuseki2/" target="_blank">Apache Jena Fuseki</a>
+    </small>
+
+    <spoggy-fuseki id="fusekiElem" endpoint="${endpoint}" dataset="${dataset}" query="${query}"></spoggy-fuseki>
+
     </td>
     <td>
     <spoggy-graph id="endpointFuseki" name="endpointFuseki" endpoint="http://127.0.0.1:3030/dataset" endpoint-type="fuseki" query="SELECT * WHERE {?s ?p ?o}" >
@@ -129,8 +160,10 @@ class SpoggyApp extends LitElement {
   static get properties() {
     return {
       source: {type: String},
-      jsonData: {type: Object}
-
+      jsonData: {type: Object},
+      endpoint: {type: String},
+      dataset: {type: String},
+      query: {type: String}
     };
   }
 
@@ -151,28 +184,74 @@ class SpoggyApp extends LitElement {
     //  this.agentApp.send('agentApp', {type: 'dispo', name: 'agentGraph' });
     this._ajax = this.shadowRoot.getElementById('request');
     this._inputJson = this.shadowRoot.getElementById('inputJson');
+
+    this._ajaxFuseki = this.shadowRoot.getElementById('requestFuseki');
+    this._inputFusekiEndpoint = this.shadowRoot.getElementById('inputFusekiEndpoint');
+    this._inputFusekiDataset = this.shadowRoot.getElementById('inputFusekiDataset');
+    this._inputFusekiQuery = this.shadowRoot.getElementById('inputFusekiQuery');
+    this.fusekiElem = this.shadowRoot.getElementById('fusekiElem');
+
+
+
     this._inputRdf = this.shadowRoot.getElementById('inputRdf');
     this._ajaxRdf = this.shadowRoot.getElementById('requestRdf');
   }
 
-  _load_json(e){
-    //  console.log(e);
-    //  console.log(this._inputJson.value);
-    this._ajax.url = this._inputJson.value;
-    //  console.log(this._ajax);
-    //  this._ajax.generateRequest();
-    /*
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', this._ajax.url, true);
-    xhr.withCredentials = true;
-    xhr.onreadystatechange = function() {
-    if(xhr.readyState == 4 && xhr.status == 200) {
-    console.log(xhr.responseText);
-    // Get header from php server request if you want for something
-    var cookie = xhr.getResponseHeader("Cookie");
-    // alert("Cookie: " + cookie);
-  }else{
-  console.log("error ", xhr.responseText)
+  _load_fuseki(e){
+    this.endpoint = this._inputFusekiEndpoint.value;
+    this.dataset = this._inputFusekiDataset.value;
+    this.query = this._inputFusekiQuery.value;
+    console.log("ELEMENT : ",this.fusekiElem)
+    /*this._ajaxFuseki.url = this._inputFusekiEndpoint.value+"/"+this._inputFusekiDataset.value;
+    console.log(this._ajaxFuseki.url)
+    var app = this;
+    let request = this._ajaxFuseki.generateRequest();
+    console.log(request);
+    request.completes.then(function(request) {
+      // succesful request, argument is iron-request element
+      var rep = request.response;
+      console.log(rep);
+      app._handleResponseFuseki(rep);
+    }, function(rejected) {
+      // failed request, argument is an object
+      let req = rejected.request;
+      let error = rejected.error;
+      app._handleErrorResponseFuseki(error)
+      console.log("error", error)
+    }
+  )*/
+}
+
+
+
+_handleResponseFuseki(data){
+  console.log(data);
+  //  this.jsonData = JSON.stringify(data);
+
+}
+
+_handleErrorResponseFuseki(data){
+  console.log(data)
+}
+
+_load_json(e){
+  //  console.log(e);
+  //  console.log(this._inputJson.value);
+  this._ajax.url = this._inputJson.value;
+  //  console.log(this._ajax);
+  //  this._ajax.generateRequest();
+  /*
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', this._ajax.url, true);
+  xhr.withCredentials = true;
+  xhr.onreadystatechange = function() {
+  if(xhr.readyState == 4 && xhr.status == 200) {
+  console.log(xhr.responseText);
+  // Get header from php server request if you want for something
+  var cookie = xhr.getResponseHeader("Cookie");
+  // alert("Cookie: " + cookie);
+}else{
+console.log("error ", xhr.responseText)
 }
 }
 xhr.send();

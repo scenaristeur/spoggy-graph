@@ -1,9 +1,24 @@
 <html>
 
+<style>
+.milieu {
+  margin-top: 50vh; /* poussé de la moitié de hauteur de viewport */
+  transform: translateY(-50%); /* tiré de la moitié de sa propre hauteur */
+  margin-left: 50vw; /* poussé de la moitié de largeur de viewport */
+  transform: translateX(-50%); /* tiré de la moitié de sa propre largeur */
+}
+</style>
 <!--<script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>-->
 <!--<script src="node_modules/evejs/dist/eve.js"></script>-->
 <script src="../lib/rdf-ext-all-latest.min.js"></script>
 <script type="module" src="./spoggy-app.js"></script>
 
-<spoggy-app>Chargement de Spoggy-App</spoggy-app>
+<spoggy-app>
+  <div class="milieu">
+    Spoggy
+    <br>
+    <br>
+    Chargement
+  </div>
+</spoggy-app>
 </html>

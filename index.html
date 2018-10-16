@@ -1,15 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="refresh" content="0;url=demo/" />
-    <title>spoggy-graph</title>
-  </head>
-  <body>
-    <!--
-        Visit demo/index.html to see live examples of your element running.
-        This page will automatically redirect you there when run in the browser
-        with `polymer serve --open`.
-      -->
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="0;url=demo/" />
+  <title>spoggy-graph</title>
+  <style>
+  .milieu {
+    margin-top: 50vh; /* poussé de la moitié de hauteur de viewport */
+    transform: translateY(-50%); /* tiré de la moitié de sa propre hauteur */
+    margin-left: 50vw; /* poussé de la moitié de largeur de viewport */
+    transform: translateX(-50%); /* tiré de la moitié de sa propre largeur */
+  }
+  </style>
+</head>
+<body>
+  <!--
+  Visit demo/index.html to see live examples of your element running.
+  This page will automatically redirect you there when run in the browser
+  with `polymer serve --open`.
+-->
+<div class="milieu">
+  Spoggy <br> <br>  Accueil
+</div>
+</body>
 </html>
