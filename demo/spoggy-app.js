@@ -13,7 +13,7 @@ import "../spoggy-fuseki.js";
 
 class SpoggyApp extends LitElement {
   render() {
-    const { endpoint, dataset, query, _graph, _source, _mode, disabled, jsonData } = this;
+    const { endpoint, dataset, query, _graph, _source, _mode, disabled, jsonData, fusekiData } = this;
     return html`
 
     <iron-ajax
@@ -95,13 +95,14 @@ class SpoggyApp extends LitElement {
     <a href="http://jena.apache.org/documentation/fuseki2/" target="_blank">Apache Jena Fuseki</a>
     </small>
 
-    <spoggy-fuseki id="fusekiElem" endpoint="${endpoint}" dataset="${dataset}" query="${query}"></spoggy-fuseki>
+    <spoggy-fuseki id="fusekiElem" endpoint="${endpoint}" dataset="${dataset}" query="${query}" ></spoggy-fuseki>
 
     </td>
     <td>
-    <spoggy-graph id="endpointFuseki" name="endpointFuseki" endpoint="http://127.0.0.1:3030/dataset" endpoint-type="fuseki" query="SELECT * WHERE {?s ?p ?o}" >
+    <spoggy-graph id="endpointFuseki" name="endpointFuseki" data="${fusekiData}" >
     Chargement du graphe
     </spoggy-graph>
+
     </td>
     </tr>
 
@@ -163,7 +164,8 @@ class SpoggyApp extends LitElement {
       jsonData: {type: Object},
       endpoint: {type: String},
       dataset: {type: String},
-      query: {type: String}
+      query: {type: String},
+      fusekiData: {type: Object}
     };
   }
 
@@ -201,8 +203,14 @@ class SpoggyApp extends LitElement {
     this.dataset = this._inputFusekiDataset.value;
     this.query = this._inputFusekiQuery.value;
 }
-
-
+/*
+update(visresults){
+  console.log("updated", this.visresults);
+}
+update(visresults){
+  super.update(this.visresults);
+  console.log("updated", this.visresults);
+}*/
 
 
 
@@ -305,6 +313,13 @@ _handleErrorResponseRdf(data){
   console.log(data)
 }
 
+
+updateNetwork(visresults){
+  console.log(visresults)
+  this.fusekiData = JSON.stringify(visresults);
+}
+
+
 ////////////////////////////// TEST RDF-EXT
 
 _testRdfExt(){
@@ -398,7 +413,6 @@ _testN3Parser(){
     })
   })
 }
-
 
 
 

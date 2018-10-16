@@ -40,14 +40,11 @@ AppAgent.prototype.receive = function(from, message) {
 
 
   switch(message.type){
-    case 'inc':
-    this.app.value++;
-    console.log("inc");
+    case 'visresults':
+    console.log("visresults", message.visresults);
+    this.app.updateNetwork(message.visresults);
     break;
-    case 'dec':
-    console.log("dec");
-    this.app.value--;
-    break;
+
     case 'catchTriplet':
     let triplet = message.triplet;
     console.log(triplet)
