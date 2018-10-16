@@ -15,15 +15,18 @@ Module pour attrapper les parametres d'url :
 */
 
 import { LitElement, html } from '@polymer/lit-element';
+//import { repeat } from '@polymer/lit-element/node_modules/lit-html/lib/repeat.js';
 import '@polymer/iron-ajax/iron-ajax.js';
 import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-item/paper-item.js';
+import '@polymer/paper-listbox/paper-listbox.js';
 
 import  'evejs/dist/eve.min.js';
 import { FusekiAgent } from './agents/FusekiAgent.js'
 
 class SpoggyFuseki extends LitElement {
   render() {
-    const { endpoint, dataset, query } = this;
+    const { endpoint, dataset, query, datasets } = this;
     return html`
 
     <style>
@@ -52,8 +55,7 @@ class SpoggyFuseki extends LitElement {
     method="GET"
     content-type="application/text"
     handle-as="text"
-    on-response="_handleFusekiServer"
-    on-error="_handleFusekiServerError"
+
     ></iron-ajax>
 
     <div>
@@ -75,6 +77,13 @@ class SpoggyFuseki extends LitElement {
     </paper-input>
 
 
+    <ul>
+    ${datasets.map((i) => html`<li>${i.ds_name}</li>`)}
+    </ul>
+
+
+
+
     <paper-input
     id="inputFusekiQuery"
     label="Fuseki Sparql Query"
@@ -84,7 +93,7 @@ class SpoggyFuseki extends LitElement {
 
     <paper-button raised @click="${(e) =>  this._load_fuseki(e)}">Charger</paper-button>
     <br><br><br>
-
+    
     <small>
     todo :  (recupérer les datasets)<br>
     <a href="http://jena.apache.org/documentation/fuseki2/" target="_blank">Apache Jena Fuseki</a>
@@ -103,17 +112,28 @@ class SpoggyFuseki extends LitElement {
   static get properties() { return {
     dataset: String,
     query: String,
-    endpoint: {type: String}
+    endpoint: {type: String},
+    datasets: {type: Array}
   }};
 
   constructor() {
     super();
+
+    this.datasets= [];
+    /*let ds1 = {};
+    ds1.name = "test",
+    this.datasets.push (ds1);
+    let ds2 = {};
+    ds2.name = "test",
+    this.datasets.push (ds2);
+    console.log(this.datasets)*/
   }
 
   firstUpdated(){
     //  console.log("update");
     //  console.log("eve",eve);
     this.endpoint = "http://127.0.0.1:3030";
+
     this.agentFuseki = new FusekiAgent('agentFuseki', this);
     console.log(this.agentFuseki);
     this.agentFuseki.send('agentApp', {type: 'dispo', name: 'agentFuseki' });
@@ -140,6 +160,10 @@ class SpoggyFuseki extends LitElement {
   _queryChanged(e){
     console.log(e)
     this.query = this._inputFusekiQuery.value;
+  }
+
+  isEqual(mode, test){
+    return mode == test;
   }
 
   /*updated(endpoint, dataset, query){
@@ -326,14 +350,14 @@ _fuseki_ping(){
 //PING
 _handleFusekiPing(data){
   console.log("ping  Fuseki ok");
-
+  let app = this;
   this.pingFuseki = data;
   console.log(data);
-  this.status = data.detail.response;
-  console.log(this.status);
-  this.server_req.url = this.url_fuseki+"/$/server";
+  //  this.status = data.detail.response;
+  //  console.log(this.status);
+  this._ajaxServerReq.url = this.endpoint+"/$/server";
   //  this.$.status_req.body = { "email": "abc@gmail.com", "password": "password" };
-  console.log(this.url_server);
+  console.log(this._ajaxServerReq);
   //  this.server_req.generateRequest();
   let request = this._ajaxServerReq.generateRequest();
   request.completes.then(function(request) {
@@ -374,16 +398,16 @@ _handleFusekiPingError(data){
 _handleFusekiServer(data){
   console.log("server ok");
   console.log(data);
-  var clemodif = data.detail.response.replace(/ds\./g, "ds_")
+  var clemodif = data.replace(/ds\./g, "ds_")
   this.server = JSON.parse(clemodif);
   console.log(this.server);
   this.datasets = this.server.datasets;
-  if(this.dataset == undefined){
+  if(this.dataset == "undefined"){
     this.dataset = this.datasets[0].ds_name;
   }
   console.log(this.datasets);
-  console.log("selected "+this.dataset);
-  this.agentFuseki.send('agentGlobal', {type: "updateEndpointData", server:{datasets: this.datasets, selected: this.dataset}});
+  console.log("selected2 "+this.dataset);
+  //  this.agentFuseki.send('agentGlobal', {type: "updateEndpointData", server:{datasets: this.datasets, selected: this.dataset}});
 }
 _handleFusekiServerError(data){
   console.log("error server");
