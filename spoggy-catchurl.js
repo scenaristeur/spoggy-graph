@@ -96,7 +96,7 @@ class SpoggyCatchurl extends LitElement {
   }
 
   firstUpdated(){
-    console.log("update");
+  //  console.log("update");
     //  console.log("eve",eve);
     this.agentCatchurl = new CatchurlAgent('agentCatchurl', this);
       console.log(this.agentCatchurl);

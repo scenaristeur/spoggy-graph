@@ -77,7 +77,7 @@ class SpoggyApp extends LitElement {
     <paper-input
     id="inputFusekiDataset"
     label="Fuseki Sparql Dataset"
-    value="test">
+    value="bidule">
     </paper-input>
 
 
@@ -185,7 +185,6 @@ class SpoggyApp extends LitElement {
     this._ajax = this.shadowRoot.getElementById('request');
     this._inputJson = this.shadowRoot.getElementById('inputJson');
 
-    this._ajaxFuseki = this.shadowRoot.getElementById('requestFuseki');
     this._inputFusekiEndpoint = this.shadowRoot.getElementById('inputFusekiEndpoint');
     this._inputFusekiDataset = this.shadowRoot.getElementById('inputFusekiDataset');
     this._inputFusekiQuery = this.shadowRoot.getElementById('inputFusekiQuery');
@@ -201,38 +200,11 @@ class SpoggyApp extends LitElement {
     this.endpoint = this._inputFusekiEndpoint.value;
     this.dataset = this._inputFusekiDataset.value;
     this.query = this._inputFusekiQuery.value;
-    console.log("ELEMENT : ",this.fusekiElem)
-    /*this._ajaxFuseki.url = this._inputFusekiEndpoint.value+"/"+this._inputFusekiDataset.value;
-    console.log(this._ajaxFuseki.url)
-    var app = this;
-    let request = this._ajaxFuseki.generateRequest();
-    console.log(request);
-    request.completes.then(function(request) {
-      // succesful request, argument is iron-request element
-      var rep = request.response;
-      console.log(rep);
-      app._handleResponseFuseki(rep);
-    }, function(rejected) {
-      // failed request, argument is an object
-      let req = rejected.request;
-      let error = rejected.error;
-      app._handleErrorResponseFuseki(error)
-      console.log("error", error)
-    }
-  )*/
 }
 
 
 
-_handleResponseFuseki(data){
-  console.log(data);
-  //  this.jsonData = JSON.stringify(data);
 
-}
-
-_handleErrorResponseFuseki(data){
-  console.log(data)
-}
 
 _load_json(e){
   //  console.log(e);

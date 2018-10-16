@@ -294,7 +294,7 @@ class SpoggyGraph extends LitElement {
 
   updated(data){
     //  super.updated(data)
-    console.log("UPDATE DATA", data);
+    console.log("updated", data);
     /*var dataset =  JSON.stringify(eval("(" + this.data + ")"));
     if (dataset != undefined){
     console.log(dataset)
@@ -311,7 +311,7 @@ class SpoggyGraph extends LitElement {
 
 update(data) {
   super.update(data);
-  console.log('updated!', data);
+  console.log('update', data);
   var dataset =  JSON.stringify(eval("(" + this.data + ")"));
   if (dataset != undefined){
     dataset = JSON.parse(dataset);
