@@ -67,36 +67,7 @@ class SpoggyApp extends LitElement {
 
     <tr>
     <td>
-    Requete 'SELECT * WHERE {?s ?p ?o}' vers un endpoint Fuseki :<br>
-    <paper-input
-    id="inputFusekiEndpoint"
-    label="Fuseki Sparql Endpoint"
-    value="http://127.0.0.1:3030">
-    </paper-input>
-
-    <paper-input
-    id="inputFusekiDataset"
-    label="Fuseki Sparql Dataset"
-    value="bidule">
-    </paper-input>
-
-
-    <paper-input
-    id="inputFusekiQuery"
-    label="Fuseki Sparql Query"
-    value="SELECT * WHERE {?s ?p ?o}">
-    </paper-input>
-
-    <paper-button raised @click="${(e) =>  this._load_fuseki(e)}">Charger</paper-button>
-    <br><br><br>
-
-    <small>
-    todo :  (recupérer les datasets)<br>
-    <a href="http://jena.apache.org/documentation/fuseki2/" target="_blank">Apache Jena Fuseki</a>
-    </small>
-
     <spoggy-fuseki id="fusekiElem" endpoint="${endpoint}" dataset="${dataset}" query="${query}" ></spoggy-fuseki>
-
     </td>
     <td>
     <spoggy-graph id="endpointFuseki" name="endpointFuseki" data="${fusekiData}" >
@@ -187,10 +158,7 @@ class SpoggyApp extends LitElement {
     this._ajax = this.shadowRoot.getElementById('request');
     this._inputJson = this.shadowRoot.getElementById('inputJson');
 
-    this._inputFusekiEndpoint = this.shadowRoot.getElementById('inputFusekiEndpoint');
-    this._inputFusekiDataset = this.shadowRoot.getElementById('inputFusekiDataset');
-    this._inputFusekiQuery = this.shadowRoot.getElementById('inputFusekiQuery');
-    this.fusekiElem = this.shadowRoot.getElementById('fusekiElem');
+
 
 
 
@@ -198,11 +166,7 @@ class SpoggyApp extends LitElement {
     this._ajaxRdf = this.shadowRoot.getElementById('requestRdf');
   }
 
-  _load_fuseki(e){
-    this.endpoint = this._inputFusekiEndpoint.value;
-    this.dataset = this._inputFusekiDataset.value;
-    this.query = this._inputFusekiQuery.value;
-}
+
 /*
 update(visresults){
   console.log("updated", this.visresults);

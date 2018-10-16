@@ -16,19 +16,14 @@ Module pour attrapper les parametres d'url :
 
 import { LitElement, html } from '@polymer/lit-element';
 import '@polymer/iron-ajax/iron-ajax.js';
-// These are the elements needed by this element.
-//import { plusIcon, minusIcon } from './../my-icons.js';
+import '@polymer/paper-button/paper-button.js';
 
-// These are the shared styles needed by this element.
-//import { ButtonSharedStyles } from './../button-shared-styles.js';
 import  'evejs/dist/eve.min.js';
 import { FusekiAgent } from './agents/FusekiAgent.js'
-// This is a reusable element. It is not connected to the store. You can
-// imagine that it could just as well be a third-party element that you
-// got from someone else.
+
 class SpoggyFuseki extends LitElement {
   render() {
-    //  const { endpoint, dataset, query } = this;
+    const { endpoint, dataset, query } = this;
     return html`
 
     <style>
@@ -49,8 +44,6 @@ class SpoggyFuseki extends LitElement {
     method="GET"
     content-type="application/text"
     handle-as="text"
-    on-response="_handleFusekiPing"
-    on-error="_handleFusekiPingError"
     ></iron-ajax>
 
     <iron-ajax
@@ -64,11 +57,45 @@ class SpoggyFuseki extends LitElement {
     ></iron-ajax>
 
     <div>
-    <p>
+
+
+    Requete 'SELECT * WHERE {?s ?p ?o}' vers un endpoint Fuseki :<br>
+    <paper-input
+    id="inputFusekiEndpoint"
+    label="Fuseki Sparql Endpoint"
+    value="${endpoint}"
+    @change="${(e) =>  this._endpointChanged(e)}">
+    </paper-input>
+
+    <paper-input
+    id="inputFusekiDataset"
+    label="Fuseki Sparql Dataset"
+    value="bidule"
+    @change="${(e) =>  this._datasetChanged(e)}">
+    </paper-input>
+
+
+    <paper-input
+    id="inputFusekiQuery"
+    label="Fuseki Sparql Query"
+    value="SELECT * WHERE {?s ?p ?o}"
+    @change="${(e) =>  this._queryChanged(e)}">
+    </paper-input>
+
+    <paper-button raised @click="${(e) =>  this._load_fuseki(e)}">Charger</paper-button>
+    <br><br><br>
+
+    <small>
+    todo :  (recupérer les datasets)<br>
+    <a href="http://jena.apache.org/documentation/fuseki2/" target="_blank">Apache Jena Fuseki</a>
+    </small>
+
+
     Endpoint : <span class="green">${this.endpoint}</span><hr>
     Dataset :  <span class="green">${this.dataset}</span><hr>
     Query : <span class="green">${this.query}</span><hr>
-
+    <paper-button raised @click="${(e) =>  this._fuseki_ping(e)}">Fuseki Ping</paper-button>
+    <paper-button raised @click="${(e) =>  this._get_dataset(e)}">Get datasets</paper-button>
     </div>
     `;
   }
@@ -86,54 +113,69 @@ class SpoggyFuseki extends LitElement {
   firstUpdated(){
     //  console.log("update");
     //  console.log("eve",eve);
+    this.endpoint = "http://127.0.0.1:3030";
     this.agentFuseki = new FusekiAgent('agentFuseki', this);
     console.log(this.agentFuseki);
     this.agentFuseki.send('agentApp', {type: 'dispo', name: 'agentFuseki' });
     //console.log("fuseki");
     this._ajaxFuseki = this.shadowRoot.getElementById('requestFuseki');
-
+    this._ajaxFusekiPing = this.shadowRoot.getElementById('fusekiPing');
+    this._ajaxServerReq = this.shadowRoot.getElementById('server_req')
+    this._inputFusekiEndpoint = this.shadowRoot.getElementById('inputFusekiEndpoint');
+    this._inputFusekiDataset = this.shadowRoot.getElementById('inputFusekiDataset');
+    this._inputFusekiQuery = this.shadowRoot.getElementById('inputFusekiQuery');
+    this.fusekiElem = this.shadowRoot.getElementById('fusekiElem');
+    this._fuseki_ping(this.endpoint)
   }
 
-  updated(endpoint, dataset, query){
-    //  super.updated(data)
-    console.log("updated", this.endpoint, this.dataset, this.query);
-    /*var dataset =  JSON.stringify(eval("(" + this.data + ")"));
-    if (dataset != undefined){
-    console.log(dataset)
-    console.log(this.network)
-    var nodes = dataset.nodes;
-    var edges = dataset.edges;
-    console.log(nodes);
-    console.log(edges);
-    this.network.body.data.nodes.update(nodes);
-    this.network.body.data.edges.update(edges);
-  }*/
+  _endpointChanged(e){
+    console.log(e)
+    this.endpoint = this._inputFusekiEndpoint.value;
+    this._fuseki_ping();
+  }
+  _datasetChanged(e){
+    console.log(e)
+    this.dataset = this._inputFusekiDataset.value;
+  }
+  _queryChanged(e){
+    console.log(e)
+    this.query = this._inputFusekiQuery.value;
+  }
+
+  /*updated(endpoint, dataset, query){
+  //  super.updated(data)
+  console.log("updated", this.endpoint, this.dataset, this.query);
+
   if (this._ajaxFuseki != undefined && this.endpoint != "undefined"){
 
-    let options = {
-      query: this.query,
-      format: 'application/sparql-results+json',
-    }
-    this._ajaxFuseki.url = this.endpoint+"/"+this.dataset;
-    this._ajaxFuseki.params = options;
-    var app = this;
-    let request = this._ajaxFuseki.generateRequest();
-    request.completes.then(function(request) {
-      // succesful request, argument is iron-request element
-      var rep = request.response;
-      app._handleResponseFuseki(rep);
-    }, function(rejected) {
-      // failed request, argument is an object
-      let req = rejected.request;
-      let error = rejected.error;
-      app._handleErrorResponseFuseki(error)
-      //  console.log("error", error)
-    }
-  )
+  let options = {
+  query: this.query,
+  format: 'application/sparql-results+json',
 }
+this._ajaxFuseki.url = this.endpoint+"/"+this.dataset;
+this._ajaxFuseki.params = options;
+var app = this;
+let request = this._ajaxFuseki.generateRequest();
+request.completes.then(function(request) {
+// succesful request, argument is iron-request element
+var rep = request.response;
+app._handleResponseFuseki(rep);
+}, function(rejected) {
+// failed request, argument is an object
+let req = rejected.request;
+let error = rejected.error;
+app._handleErrorResponseFuseki(error)
+//  console.log("error", error)
 }
+)
+}
+}*/
 
-
+_load_fuseki(e){
+  this.endpoint = this._inputFusekiEndpoint.value;
+  this.dataset = this._inputFusekiDataset.value;
+  this.query = this._inputFusekiQuery.value;
+}
 
 _handleResponseFuseki(data){
   console.log(data);
@@ -160,7 +202,7 @@ _sparqlToVis(sparqlRes){
 
 
 
-console.log("-----------------------",sr);
+    console.log("-----------------------",sr);
 
     switch (sr.p.value){
       case "http://www.w3.org/2000/01/rdf-schema#label":
@@ -215,13 +257,13 @@ console.log("-----------------------",sr);
       }
 
       //  let nodeO = {id: o[1], prefix:o[0], label: o[0], type: "node"};
-        let edgeP = {label: p[1], prefix:p[0], from: nodeS.id, to: nodeO.id, type: "edge"};
+      let edgeP = {label: p[1], prefix:p[0], from: nodeS.id, to: nodeO.id, type: "edge"};
       console.log("nodeS",nodeS)
       console.log("nodeO",nodeO)
       console.log("edgeP",edgeP)
       visRes.nodes.push(nodeS);
       visRes.nodes.push(nodeO);
-        visRes.edges.push(edgeP);
+      visRes.edges.push(edgeP);
     }
 
 
@@ -257,12 +299,27 @@ _tripletToLabel(t, visRes){
 
 
 
-ping_Fuseki(endpoint){
-  this.url_fuseki = endpoint.url;
-  this.url_fuseki_ping = endpoint.url+"/$/ping";
+_fuseki_ping(){
+  //this.url_fuseki = endpoint;
+  this._ajaxFusekiPing.url = this.endpoint+"/$/ping";
   //  this.$.status_req.body = { "email": "abc@gmail.com", "password": "password" };
-  console.log(this.url_fuseki_ping);
-  this.$.fusekiPing.generateRequest();
+  console.log(this._ajaxFusekiPing);
+  //this._ajaxFusekiPing.generateRequest();
+
+  var app = this;
+  let request = this._ajaxFusekiPing.generateRequest();
+  request.completes.then(function(request) {
+    // succesful request, argument is iron-request element
+    var rep = request.response;
+    app._handleFusekiPing(rep);
+  }, function(rejected) {
+    // failed request, argument is an object
+    let req = rejected.request;
+    let error = rejected.error;
+    app._handleFusekiPingError(error)
+    //  console.log("error", error)
+  }
+)
 }
 
 
@@ -274,14 +331,27 @@ _handleFusekiPing(data){
   console.log(data);
   this.status = data.detail.response;
   console.log(this.status);
-  this.url_server = this.url_fuseki+"/$/server";
+  this.server_req.url = this.url_fuseki+"/$/server";
   //  this.$.status_req.body = { "email": "abc@gmail.com", "password": "password" };
   console.log(this.url_server);
-  this.$.server_req.generateRequest();
-  //this.$.fusekiPopup.toggle();
-  this.agentFuseki.send('agentGlobal', {type: "updateEndpointData", ping: this.status})
+  //  this.server_req.generateRequest();
+  let request = this._ajaxServerReq.generateRequest();
+  request.completes.then(function(request) {
+    // succesful request, argument is iron-request element
+    var rep = request.response;
+    app._handleFusekiServer(rep);
+  }, function(rejected) {
+    // failed request, argument is an object
+    let req = rejected.request;
+    let error = rejected.error;
+    app._handleFusekiServerError(error)
+    //  console.log("error", error)
+  }
+)
+//this.$.fusekiPopup.toggle();
+//this.agentFuseki.send('agentGlobal', {type: "updateEndpointData", ping: this.status})
 
-  //  this.$.labelEndpoint.label = "Endpoint : ping Fuseki OK";
+//  this.$.labelEndpoint.label = "Endpoint : ping Fuseki OK";
 }
 _handleFusekiPingError(data){
   console.log("error ping  Fuseki");
