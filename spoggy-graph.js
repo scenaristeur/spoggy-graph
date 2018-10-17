@@ -328,9 +328,9 @@ firstUpdated() {
   //  console.log("vis",vis);
 
   console.log('------------name : ', this.name, 'id : ', this.id);
-  this.agentGraph = new GraphAgent(this.name, this);
+  this.agentGraph = new GraphAgent(this.id, this);
 //  console.log(this.agentGraph);
-  this.agentGraph.send('agentApp', {type: 'dispo', name: this.name });
+  this.agentGraph.send('agentApp', {type: 'dispo', name: this.id });
   // create a network
   //  var container = document.getElementById('mynetwork');
 

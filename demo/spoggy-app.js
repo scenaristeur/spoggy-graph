@@ -58,7 +58,7 @@ class SpoggyApp extends LitElement {
     <td>
 
 
-    <spoggy-graph id="jsongraphID" name="jsongraph-name" data="${jsonData}" source="https://raw.githubusercontent.com/scenaristeur/heroku-spoggy/master/public/exemple_files/Spoggy_init2.json" >
+    <spoggy-graph id="jsongraph" name="jsongraph" data="${jsonData}" source="https://raw.githubusercontent.com/scenaristeur/heroku-spoggy/master/public/exemple_files/Spoggy_init2.json" >
     Chargement du graphe
     </spoggy-graph>
     </td>
