@@ -11,6 +11,7 @@ import "../spoggy-fuseki.js";
 
 
 
+
 class SpoggyApp extends LitElement {
   render() {
     const { endpoint, dataset, query, _graph, _source, _mode, disabled, jsonData, fusekiData } = this;
@@ -55,6 +56,8 @@ class SpoggyApp extends LitElement {
     <paper-button raised>Parcourir (en cours)</paper-button>-->
     </td>
     <td>
+
+
     <spoggy-graph id="jsongraphID" name="jsongraph-name" data="${jsonData}" source="https://raw.githubusercontent.com/scenaristeur/heroku-spoggy/master/public/exemple_files/Spoggy_init2.json" >
     Chargement du graphe
     </spoggy-graph>

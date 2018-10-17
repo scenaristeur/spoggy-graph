@@ -59,7 +59,6 @@ class SpoggyFuseki extends LitElement {
     method="GET"
     content-type="application/text"
     handle-as="text"
-
     ></iron-ajax>
 
     <div>
@@ -105,8 +104,6 @@ class SpoggyFuseki extends LitElement {
       Endpoint : <span class="green">${this.endpoint}</span><hr>
       Dataset :  <span class="green">${this.dataset}</span><hr>
       Query : <span class="green">${this.query}</span><hr>
-      <paper-button raised @click="${(e) =>  this._fuseki_ping(e)}">Fuseki Ping</paper-button>
-      <paper-button raised @click="${(e) =>  this._get_dataset(e)}">Get datasets</paper-button>
       </div>
       `;
     }
@@ -432,16 +429,16 @@ _handleFusekiPingError(data){
 //SERVER
 _handleFusekiServer(data){
   console.log("server ok");
-  console.log(data);
+//  console.log(data);
   var clemodif = data.replace(/ds\./g, "ds_")
   this.server = JSON.parse(clemodif);
-  console.log(this.server);
+//  console.log(this.server);
   this.datasets = this.server.datasets;
   if(this.dataset == "undefined"){
     this.dataset = this.datasets[0].ds_name;
   }
   console.log(this.datasets);
-  console.log("selected2 "+this.dataset);
+  console.log("selected2 ne fonctionne pas"+this.dataset);
   //  this.agentFuseki.send('agentGlobal', {type: "updateEndpointData", server:{datasets: this.datasets, selected: this.dataset}});
 }
 _handleFusekiServerError(data){

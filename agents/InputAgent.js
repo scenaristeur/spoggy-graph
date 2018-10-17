@@ -4,7 +4,7 @@
 * @constructor
 * @extend eve.Agent
 */
-export function GraphAgent(id, app) {
+export function InputAgent(id, app) {
   // execute super constructor
   eve.Agent.call(this, id);
   this.app = app;
@@ -13,24 +13,24 @@ export function GraphAgent(id, app) {
 }
 
 // extend the eve.Agent prototype
-GraphAgent.prototype = Object.create(eve.Agent.prototype);
-GraphAgent.prototype.constructor = GraphAgent;
+InputAgent.prototype = Object.create(eve.Agent.prototype);
+InputAgent.prototype.constructor = InputAgent;
 
 /**
 * Send a greeting to an agent
 * @param {String} to
 */
-GraphAgent.prototype.sayHello = function(to) {
+InputAgent.prototype.sayHello = function(to) {
   this.send(to, 'Hello ' + to + '!');
 };
 
 /**
 * Handle incoming greetings. This overloads the default receive,
-* so we can't use GraphAgent.on(pattern, listener) anymore
+* so we can't use InputAgent.on(pattern, listener) anymore
 * @param {String} from     Id of the sender
 * @param {*} message       Received message, a JSON object (often a string)
 */
-GraphAgent.prototype.receive = function(from, message) {
+InputAgent.prototype.receive = function(from, message) {
 
   if (typeof message == String && message.indexOf('Hello') === 0) {
     // reply to the greeting
@@ -40,18 +40,18 @@ GraphAgent.prototype.receive = function(from, message) {
 
 
   switch(message.type){
-    case 'catchTriplet':
-    let triplet = message.triplet;
-    console.log(triplet)
-    this.app.tripletToNetwork(triplet);
-    break;
     case 'inc':
     this.app.value++;
     console.log("inc");
     break;
     case 'dec':
+    console.log("dec");
     this.app.value--;
-    console.log("dec")
+    break;
+    case 'catchTriplet':
+    let triplet = message.triplet;
+    console.log(triplet)
+    this.app.catchTriplet(triplet);
     break;
     case 'clear':
     this.app.clear();
@@ -65,12 +65,12 @@ GraphAgent.prototype.receive = function(from, message) {
     case 'decortiqueFile':
     this.app.decortiqueFile(message.fichier, message.remplaceNetwork);
     break;
-    case 'newGraph':
-    this.app.newGraph();
+    case 'newInput':
+    this.app.newInput();
     break;
-    case 'addToGraph':
+    case 'addToInput':
     console.log(message.data)
-    this.app.addToGraph(message.data);
+    this.app.addToInput(message.data);
     break;
     case 'populateVis':
     console.log(message.data)
@@ -106,12 +106,12 @@ GraphAgent.prototype.receive = function(from, message) {
     break;
     case 'askNetworkOptions':
     console.log(this.app.network.physics.options.repulsion)
-    this.app.agentGraph.send('agentReglagesGraph', {type:'initOptions', repulsion : this.app.network.physics.options.repulsion});
+    this.app.agentInput.send('agentReglagesInput', {type:'initOptions', repulsion : this.app.network.physics.options.repulsion});
     break;
     case 'resetNetworkOptions':
     this.app.resetNetworkOptions();
     console.log(this.app.network.physics.options.repulsion)
-    this.app.agentGraph.send('agentReglagesGraph', {type:'initOptions', repulsion : this.app.network.physics.options.repulsion});
+    this.app.agentInput.send('agentReglagesInput', {type:'initOptions', repulsion : this.app.network.physics.options.repulsion});
     break;
     case 'exportTtl':
     console.log('exportTtl')

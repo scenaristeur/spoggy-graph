@@ -3,6 +3,8 @@ import 'vis/dist/vis.js';
 import  'evejs/dist/eve.min.js';
 import { GraphAgent } from './agents/GraphAgent.js'
 import { ttl2Xml, rdf2Xml } from './lib/import-export.js'
+import { catchTriplet } from './lib/graphBehavior.js'
+import "./spoggy-input.js";
 
 class SpoggyGraph extends LitElement {
 
@@ -269,8 +271,8 @@ class SpoggyGraph extends LitElement {
     <input type="button" value="cancel" id="edge-cancelButton" />
     </div>
     <br>
-    Source : <span class="source">${this.source}</span>
 
+<spoggy-input destinataire="${this.id}"></spoggy-input>
     <div id="mynetwork"></div>
     `;
   }
@@ -287,6 +289,7 @@ class SpoggyGraph extends LitElement {
 
   constructor() {
     super();
+
   //  this.id = "noid";
   //  this.name = "anonymous";
   //  this.source = "nosource";
@@ -323,6 +326,7 @@ update(data) {
 firstUpdated() {
   //  super.firstUpdated()
   //  console.log("vis",vis);
+
   console.log('------------name : ', this.name, 'id : ', this.id);
   this.agentGraph = new GraphAgent(this.name, this);
 //  console.log(this.agentGraph);
@@ -479,6 +483,12 @@ firstUpdated() {
       }
     }
   }
+  /////////////////////////////////////
+  tripletToNetwork(triplet){
+    console.log(triplet)
+    catchTriplet(triplet, this.network)
+  }
+
 
 
 }
