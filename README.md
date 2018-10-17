@@ -58,3 +58,10 @@ sudo npm i -g polymer-cli --unsafe-perm
 TODO ajouter demo a githubpages : https://github.com/zellwk/chatapp-polymer/blob/master/docs/deploy-to-github-pages.md
 
 # rdf-ext https://github.com/rdf-ext/documentation
+
+# lit-html exemples :
+https://alligator.io/web-components/lit-html/
+
+https://github.com/LarsDenBakker/lit-html-examples
+
+https://gist.github.com/WebReflection/ab43649d9e4a53ac900b5924c77a310e

@@ -7,11 +7,14 @@
     "@polymer/iron-ajax": "^3.0.1",
     "@polymer/lit-element": "^0.6.2",
     "@polymer/paper-button": "^3.0.1",
+    "@polymer/paper-dropdown-menu": "^3.0.1",
     "@polymer/paper-input": "^3.0.1",
     "@polymer/paper-item": "^3.0.1",
     "@polymer/paper-listbox": "^3.0.1",
+    "@polymer/paper-spinner": "^3.0.1",
     "evejs": "^0.5.0",
-    "vis": "^4.21.0"
+    "vis": "^4.21.0",
+    "web-animations-js": "^2.3.1"
   },
   "devDependencies": {
     "@webcomponents/webcomponentsjs": "^2.1.3"
