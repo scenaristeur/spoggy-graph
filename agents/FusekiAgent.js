@@ -40,18 +40,12 @@ FusekiAgent.prototype.receive = function(from, message) {
 
 
   switch(message.type){
-    case 'inc':
-    this.app.value++;
-    console.log("inc");
-    break;
-    case 'dec':
-    console.log("dec");
-    this.app.value--;
-    break;
-    case 'catchTriplet':
-    let triplet = message.triplet;
-    console.log(triplet)
-    this.app.catchTriplet(triplet);
+
+    case 'newActions':
+  //  let triplet = message.triplet;
+    console.log("#####################",message);
+    this.app.graphToQuery(message);
+  //  this.app.catchTriplet(triplet);
     break;
     case 'clear':
     this.app.clear();

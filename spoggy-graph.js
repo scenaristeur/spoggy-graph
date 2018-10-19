@@ -486,7 +486,9 @@ firstUpdated() {
   /////////////////////////////////////
   tripletToNetwork(triplet){
     console.log(triplet)
-    catchTriplet(triplet, this.network)
+    var actionstosend = catchTriplet(triplet, this.network)
+    console.log(actionstosend);
+      this.agentGraph.send('agentFuseki', {type: "newActions", actions: actionstosend});
   }
 
 

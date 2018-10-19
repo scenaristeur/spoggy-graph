@@ -173,41 +173,41 @@ class SpoggyFuseki extends LitElement {
       return mode == test;
     }
 
-  /*  updated(endpoint, dataset, query){
-      //  super.updated(data)
-      console.log("updated", this.endpoint, this.dataset, this.query);
+    /*  updated(endpoint, dataset, query){
+    //  super.updated(data)
+    console.log("updated", this.endpoint, this.dataset, this.query);
 
-      if (this._ajaxFuseki != undefined && this.endpoint != "undefined"){
+    if (this._ajaxFuseki != undefined && this.endpoint != "undefined"){
 
-        let options = {
-          query: this.query,
-          format: 'application/sparql-results+json',
-        }
-        this._ajaxFuseki.url = this.endpoint+"/"+this.dataset;
-        this._ajaxFuseki.params = options;
-        var app = this;
-        let request = this._ajaxFuseki.generateRequest();
-        request.completes.then(function(request) {
-          // succesful request, argument is iron-request element
-          var rep = request.response;
-          app._handleResponseFuseki(rep);
-        }, function(rejected) {
-          // failed request, argument is an object
-          let req = rejected.request;
-          let error = rejected.error;
-          app._handleErrorResponseFuseki(error)
-          //  console.log("error", error)
-        }
-      )
-    }
-  }*/
-
-  _load_fuseki(e){
-    this.endpoint = this._inputFusekiEndpoint.value;
-    //this.dataset = this._inputFusekiDataset.value;
-    this.query = this._inputFusekiQuery.value;
-    this._runQuery();
+    let options = {
+    query: this.query,
+    format: 'application/sparql-results+json',
   }
+  this._ajaxFuseki.url = this.endpoint+"/"+this.dataset;
+  this._ajaxFuseki.params = options;
+  var app = this;
+  let request = this._ajaxFuseki.generateRequest();
+  request.completes.then(function(request) {
+  // succesful request, argument is iron-request element
+  var rep = request.response;
+  app._handleResponseFuseki(rep);
+}, function(rejected) {
+// failed request, argument is an object
+let req = rejected.request;
+let error = rejected.error;
+app._handleErrorResponseFuseki(error)
+//  console.log("error", error)
+}
+)
+}
+}*/
+
+_load_fuseki(e){
+  this.endpoint = this._inputFusekiEndpoint.value;
+  //this.dataset = this._inputFusekiDataset.value;
+  this.query = this._inputFusekiQuery.value;
+  this._runQuery();
+}
 
 
 _runQuery(){
@@ -233,149 +233,149 @@ _runQuery(){
 )
 }
 
-  _handleResponseFuseki(data){
-    console.log(data);
-    //  this.jsonData = JSON.stringify(data);
-    let vars=data.head.vars;
-    let results=data.results.bindings;
-    //  console.log(this.head);
-    //console.log(results);
+_handleResponseFuseki(data){
+  console.log(data);
+  //  this.jsonData = JSON.stringify(data);
+  let vars=data.head.vars;
+  let results=data.results.bindings;
+  //  console.log(this.head);
+  //console.log(results);
 
-    this.visresults = this._sparqlToVis(results);
-    console.log(this.visresults);
-    this.agentFuseki.send('agentApp', {type: 'visresults', visresults: this.visresults });
-  }
+  this.visresults = this._sparqlToVis(results);
+  console.log(this.visresults);
+  this.agentFuseki.send('agentApp', {type: 'visresults', visresults: this.visresults });
+}
 
-  _handleErrorResponseFuseki(data){
-    console.log(data)
-  }
+_handleErrorResponseFuseki(data){
+  console.log(data)
+}
 
-  _sparqlToVis(sparqlRes){
-    let app = this;
-    var visRes = {edges:[], nodes:[]};
-    //console.log("sparqlRes length: ",sparqlRes.length)
-    sparqlRes.forEach(function(sr){
+_sparqlToVis(sparqlRes){
+  let app = this;
+  var visRes = {edges:[], nodes:[]};
+  //console.log("sparqlRes length: ",sparqlRes.length)
+  sparqlRes.forEach(function(sr){
 
 
 
-      console.log("-----------------------",sr);
+    console.log("-----------------------",sr);
 
-      switch (sr.p.value){
-        case "http://www.w3.org/2000/01/rdf-schema#label":
-        let id = sr.s.value.replace('http://smag0.blogspot.fr/NS#_', '')
-        let node = {id: id, label: sr.o.value, y: 2*Math.random(), type: "node"};
-        console.log("LABEL");
+    switch (sr.p.value){
+      case "http://www.w3.org/2000/01/rdf-schema#label":
+      let id = sr.s.value.replace('http://smag0.blogspot.fr/NS#_', '')
+      let node = {id: id, label: sr.o.value, y: 2*Math.random(), type: "node"};
+      console.log("LABEL");
 
-        if (!visRes.nodes.hasOwnProperty(id)){
+      if (!visRes.nodes.hasOwnProperty(id)){
 
-          visRes.nodes[id] = node;
-          console.log("creation", node)
-        }else{
+        visRes.nodes[id] = node;
+        console.log("creation", node)
+      }else{
 
-          visRes.nodes[id].label = node.label;
-          visRes.nodes[id].y = 2*Math.random();
-          visRes.nodes[id].type = "node";
-          console.log("maj", visRes[id])
-        }
+        visRes.nodes[id].label = node.label;
+        visRes.nodes[id].y = 2*Math.random();
+        visRes.nodes[id].type = "node";
+        console.log("maj", visRes[id])
+      }
+      break;
+      default:
+      console.log("A traiter",sr);
+      let s = sr.s.value.split('#');
+      let p = sr.p.value.split('#');
+
+
+
+      let nodeS ={};
+      nodeS.id = s[1];
+      nodeS.prefix = s[0];
+      nodeS.label = s[1];
+      nodeS.type = "node";
+
+      let nodeO ={};
+      console.log(sr.o.type);
+      switch (sr.o.type){
+        case "uri":
+        console.log(sr.o);
+        let o = sr.o.value.split('#');
+
+        nodeO.id = o[1];
+        nodeO.prefix = o[0];
+        nodeO.label = o[1];
+        nodeO.type = "node";
+        break;
+        case "literal":
+        console.log("literal");
+
         break;
         default:
-        console.log("A traiter",sr);
-        let s = sr.s.value.split('#');
-        let p = sr.p.value.split('#');
-
-
-
-        let nodeS ={};
-        nodeS.id = s[1];
-        nodeS.prefix = s[0];
-        nodeS.label = s[1];
-        nodeS.type = "node";
-
-        let nodeO ={};
-        console.log(sr.o.type);
-        switch (sr.o.type){
-          case "uri":
-          console.log(sr.o);
-          let o = sr.o.value.split('#');
-
-          nodeO.id = o[1];
-          nodeO.prefix = o[0];
-          nodeO.label = o[1];
-          nodeO.type = "node";
-          break;
-          case "literal":
-          console.log("literal");
-
-          break;
-          default:
-          console.log("NON pris en charge");
-          console.log(sr.o.type)
-        }
-
-        //  let nodeO = {id: o[1], prefix:o[0], label: o[0], type: "node"};
-        let edgeP = {label: p[1], prefix:p[0], from: nodeS.id, to: nodeO.id, type: "edge"};
-        console.log("nodeS",nodeS)
-        console.log("nodeO",nodeO)
-        console.log("edgeP",edgeP)
-        visRes.nodes.push(nodeS);
-        visRes.nodes.push(nodeO);
-        visRes.edges.push(edgeP);
+        console.log("NON pris en charge");
+        console.log(sr.o.type)
       }
 
-
-
-
-
-    });
-    console.log(visRes)
-    return visRes;
-  }
-
-
-  _tripletToLabel(t, visRes){
-    console.log(t);
-    let id = sr.s.value.replace('http://smag0.blogspot.fr/NS#_', '')
-    let node = {id: id, label: sr.o.value, y: 2*Math.random(), type: "node"};
-    console.log("LABEL");
-    console.log(node)
-    if (!visRes.hasOwnProperty(id)){
-      console.log("aucun noeud n'existe ->creation")
-      visRes[id] = node;
-
-    }else{
-      console.log("un noeud existe --> maj du label")
-      visRes[id].label = node.label;
-      visRes[id].y = 2*Math.random();
-      visRes[id].type = "node"
+      //  let nodeO = {id: o[1], prefix:o[0], label: o[0], type: "node"};
+      let edgeP = {label: p[1], prefix:p[0], from: nodeS.id, to: nodeO.id, type: "edge"};
+      console.log("nodeS",nodeS)
+      console.log("nodeO",nodeO)
+      console.log("edgeP",edgeP)
+      visRes.nodes.push(nodeS);
+      visRes.nodes.push(nodeO);
+      visRes.edges.push(edgeP);
     }
 
-    return visRes
 
+
+
+
+  });
+  console.log(visRes)
+  return visRes;
+}
+
+
+_tripletToLabel(t, visRes){
+  console.log(t);
+  let id = sr.s.value.replace('http://smag0.blogspot.fr/NS#_', '')
+  let node = {id: id, label: sr.o.value, y: 2*Math.random(), type: "node"};
+  console.log("LABEL");
+  console.log(node)
+  if (!visRes.hasOwnProperty(id)){
+    console.log("aucun noeud n'existe ->creation")
+    visRes[id] = node;
+
+  }else{
+    console.log("un noeud existe --> maj du label")
+    visRes[id].label = node.label;
+    visRes[id].y = 2*Math.random();
+    visRes[id].type = "node"
   }
 
+  return visRes
+
+}
 
 
-  _fuseki_ping(){
-    //this.url_fuseki = endpoint;
-    this._ajaxFusekiPing.url = this.endpoint+"/$/ping";
-    //  this.$.status_req.body = { "email": "abc@gmail.com", "password": "password" };
-    console.log(this._ajaxFusekiPing);
-    //this._ajaxFusekiPing.generateRequest();
 
-    var app = this;
-    let request = this._ajaxFusekiPing.generateRequest();
-    request.completes.then(function(request) {
-      // succesful request, argument is iron-request element
-      var rep = request.response;
-      app._handleFusekiPing(rep);
-    }, function(rejected) {
-      // failed request, argument is an object
-      let req = rejected.request;
-      let error = rejected.error;
-      app._handleFusekiPingError(error)
-      //  console.log("error", error)
-    }
-  )
+_fuseki_ping(){
+  //this.url_fuseki = endpoint;
+  this._ajaxFusekiPing.url = this.endpoint+"/$/ping";
+  //  this.$.status_req.body = { "email": "abc@gmail.com", "password": "password" };
+  console.log(this._ajaxFusekiPing);
+  //this._ajaxFusekiPing.generateRequest();
+
+  var app = this;
+  let request = this._ajaxFusekiPing.generateRequest();
+  request.completes.then(function(request) {
+    // succesful request, argument is iron-request element
+    var rep = request.response;
+    app._handleFusekiPing(rep);
+  }, function(rejected) {
+    // failed request, argument is an object
+    let req = rejected.request;
+    let error = rejected.error;
+    app._handleFusekiPingError(error)
+    //  console.log("error", error)
+  }
+)
 }
 
 
@@ -429,10 +429,10 @@ _handleFusekiPingError(data){
 //SERVER
 _handleFusekiServer(data){
   console.log("server ok");
-//  console.log(data);
+  //  console.log(data);
   var clemodif = data.replace(/ds\./g, "ds_")
   this.server = JSON.parse(clemodif);
-//  console.log(this.server);
+  //  console.log(this.server);
   this.datasets = this.server.datasets;
   if(this.dataset == "undefined"){
     this.dataset = this.datasets[0].ds_name;
@@ -453,6 +453,65 @@ _handleFusekiServerError(data){
   this.server = data.detail.error.type + ", Impossible d'atteindre les informations relatives a l'endpoint ";
   console.log(this.server);
   this.agentFuseki.send('agentGlobal', {type: "updateEndpointData", server: {error:this.server}});
+}
+
+graphToQuery(message){
+  var prequery = this.graphToPreQuery(message)
+  console.log(prequery);
+}
+
+graphToPreQuery(message){
+  var date = Date.now();
+  console.log(date, message.actions);
+  var prequery = {};
+  prequery.type = "UPDATE";
+  var body = [];
+  message.actions.forEach(function(a){
+    var triplets= [];
+    console.log(a);
+
+    /*var data = a.data;
+    var id = data.id;
+
+    var ttype = id+" rdf:type "+data.type;
+    body.push(ttype)
+    var tlabel = id+" rdfs:label "+data.label;
+    body.push(tlabel)*/
+
+    switch (a.type) {
+      case "newNode":
+      var node = a.data;
+      console.log("node",node.id)
+      var ntype = node.id+" rdf:type "+node.type;
+      body.push(ntype)
+      var nlabel = node.id+" rdfs:label "+node.label;
+      body.push(nlabel)
+
+      break;
+      case "newEdge":
+      var edge = a.data[0];
+      var id = edge.id;
+      console.log("edge",id)
+      var etype = id+" rdf:type "+edge.type;
+      body.push(etype)
+      var elabel = id+" rdfs:label "+edge.label;
+      body.push(elabel)
+      var efrom = id+ " vis:from "+edge.from;
+      var eto = id+" vis:to "+edge.to;
+      body.push(efrom)
+      body.push(eto);
+      break;
+      default:
+      console.log("PB , je ne connais pas ce type de message ", a.type)
+    }
+
+
+  });
+  prequery.body = body;
+  console.log(prequery)
+  return prequery
+
+
 }
 
 
