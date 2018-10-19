@@ -466,6 +466,13 @@ graphToPreQuery(message){
   var prequery = {};
   prequery.type = "UPDATE";
   var body = [];
+  var tevent = "smag:_"+date+" rdf:type smag:Update";
+  body.push(tevent)
+  var tlog = "smag:_"+date+" rdf:type smag:Event";
+  body.push(tlog)
+
+
+
   message.actions.forEach(function(a){
     var triplets= [];
     console.log(a);
@@ -482,24 +489,28 @@ graphToPreQuery(message){
       case "newNode":
       var node = a.data;
       console.log("node",node.id)
-      var ntype = node.id+" rdf:type "+node.type;
+      var visnid = "vis:_"+node.id;
+      console.log(visnid)
+      var ntype = visnid+" rdf:type vis:"+node.type;
       body.push(ntype)
-      var nlabel = node.id+" rdfs:label "+node.label;
+      var nlabel = visnid+' rdfs:label "'+node.label+'"';
       body.push(nlabel)
 
       break;
       case "newEdge":
       var edge = a.data[0];
-      var id = edge.id;
+      var id = "vis:_"+edge.id;
       console.log("edge",id)
-      var etype = id+" rdf:type "+edge.type;
+      var etype = id+" rdf:type vis:"+edge.type;
       body.push(etype)
-      var elabel = id+" rdfs:label "+edge.label;
+      var elabel = id+' rdfs:label "'+edge.label+'"';
       body.push(elabel)
-      var efrom = id+ " vis:from "+edge.from;
-      var eto = id+" vis:to "+edge.to;
+      var efrom = id+ " vis:from vis:_"+edge.from;
+      var eto = id+" vis:to vis:_"+edge.to;
       body.push(efrom)
       body.push(eto);
+      var tcontent = "smag:_"+date+' rdfs:comment "'+edge.from+' '+edge.label+' '+edge.to+'"'; //"+efrom+" "+edgelabel+" "+eto"
+      body.push(tcontent)
       break;
       default:
       console.log("PB , je ne connais pas ce type de message ", a.type)

@@ -16,7 +16,8 @@ polymer serve --open
 polymer serve
 ```
 
-
+# Use with fuseki endpoint
+- first, tou need to start your fuseki endpoint and add at least one dataset
 
 
 
