@@ -1,4 +1,7 @@
 # Polymer3 element pour Spoggy3 https://github.com/scenaristeur/spoggy3
+tested with Firefox 62 on windows & Linux Mint for the moment (there is a pb betweeen evejs & chrome)
+ with nodejs 10 & 11
+
 ```
 git clone https://github.com/scenaristeur/spoggy-graph.git
 cd spoggy-graph
@@ -66,3 +69,9 @@ https://alligator.io/web-components/lit-html/
 https://github.com/LarsDenBakker/lit-html-examples
 
 https://gist.github.com/WebReflection/ab43649d9e4a53ac900b5924c77a310e
+
+# rdflib doc
+doc http://linkeddata.github.io/rdflib.js/doc/UpdateManager.htm
+
+# ethereum decentralized
+voir aussi https://github.com/llSourcell/Your_First_Decentralized_Application
