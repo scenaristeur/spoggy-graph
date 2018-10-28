@@ -214,31 +214,31 @@ class SpoggySolid extends LitElement {
     <table border="1" width="100%">
     <tr>
     <td>
-    <paper-input name="fn" label="NAME" value="${profile.fn}"></paper-input>
+    <paper-input id="fn" label="NAME" value="${profile.fn}"></paper-input>
     </td>
     <td>
-    <paper-input name="phone" label="PHONE" value="${profile.phone}"></paper-input>
-    </td>
-    </tr>
-    <tr>
-    <td>
-    <paper-input name="role" label="ROLE" value="${profile.role}"></paper-input>
-    </td>
-    <td>
-    <paper-input name="email" label="EMAIL" value="${profile.email}"></paper-input>
+    <paper-input id="phone" label="PHONE" value="${profile.phone}"></paper-input>
     </td>
     </tr>
     <tr>
     <td>
-    <paper-input name="company" label="ORGANIZATION" value="${profile.company}"></paper-input>
+    <paper-input id="role" label="ROLE" value="${profile.role}"></paper-input>
+    </td>
+    <td>
+    <paper-input id="email" label="EMAIL" value="${profile.email}"></paper-input>
+    </td>
+    </tr>
+    <tr>
+    <td>
+    <paper-input id="company" label="ORGANIZATION" value="${profile.company}"></paper-input>
     </td>
     <td>
     <fieldset>
     <legend>Address</legend>
-    <paper-input name="locality" label="LOCALITY" value="${profile.address.locality}"></paper-input>
-    <paper-input name="country_name" label="COUNTRY_NAME" value="${profile.address.country_name}"></paper-input>
-    <paper-input name="region" label="REGION" value="${profile.address.region}"></paper-input>
-    <paper-input name="street" label="STREET" value="${profile.address.street}"></paper-input>
+    <paper-input id="locality" label="LOCALITY" value="${profile.address.locality}"></paper-input>
+    <paper-input id="country_name" label="COUNTRY_NAME" value="${profile.address.country_name}"></paper-input>
+    <paper-input id="region" label="REGION" value="${profile.address.region}"></paper-input>
+    <paper-input id="street" label="STREET" value="${profile.address.street}"></paper-input>
     </fieldset>
 
     </td>
@@ -355,6 +355,7 @@ class SpoggySolid extends LitElement {
         // Set up a local data store and associated data fetcher
         this.store = $rdf.graph();
         this.fetcher = new $rdf.Fetcher(this.store);
+        this.updateManager = new $rdf.UpdateManager(this.store);
         this.loadProfile();
       }else{
         this._solidLoginBtn.style.visibility="visible";
@@ -363,12 +364,237 @@ class SpoggySolid extends LitElement {
         this._inputSolid.value = "";
       }
     });
+  }
 
 
 
+  _solid_submit(e){
+    var app = this;
+    this.profile.fn = this.shadowRoot.getElementById('fn').value;
+    this.profile.phone = this.shadowRoot.getElementById('phone').value;
+    this.profile.role = this.shadowRoot.getElementById('role').value;
+    this.profile.email = this.shadowRoot.getElementById('email').value;
+    this.profile.company = this.shadowRoot.getElementById('company').value;
+    this.profile.address.locality = this.shadowRoot.getElementById('locality').value;
+    this.profile.address.country_name = this.shadowRoot.getElementById('country_name').value;
+    this.profile.address.region = this.shadowRoot.getElementById('region').value;
+    this.profile.address.street = this.shadowRoot.getElementById('street').value;
 
+    console.log(this.profile)
+    //  if (!this.cardForm.invalid) {
+    try {
+      this.updateProfile(this.profile);
+    //  localStorage.setItem('oldProfileData', JSON.stringify(this.profile));
+    } catch (err) {
+      console.log(`Error: ${err}`);
+    }
+    //}
+  }
+
+  async updateProfile (profile){
+    console.log(profile)
+    //  updateProfile = async (form: NgForm) => {
+    const me = $rdf.sym(this.session.webId);
+    const doc = $rdf.NamedNode.fromValue(this.session.webId.split('#')[0]);
+    console.log(me)
+    console.log(doc)
+    const data = this.transformDataForm(profile, me, doc);
+
+    console.log(data)
+
+
+
+    //Update existing values
+    if(data.insertions.length > 0 || data.deletions.length > 0) {
+      console.log(this.updateManager)
+      console.log(this.session)
+      this.updateManager.update(data.deletions, data.insertions, (response, success, message) => {
+        if(success) {
+          console.log("Your Solid profile has been successfully updated");
+          //this.toastr.success('Your Solid profile has been successfully updated', 'Success!');
+          //form.form.markAsPristine();
+          //  form.form.markAsTouched();
+        } else {
+          //  this.toastr.error('Message: '+ message, 'An error has occurred');
+          console.log('Message: '+ message, 'An error has occurred');
+          console.log(response)
+        }
+      });
+    }
 
   }
+
+  transformDataForm  (form, me, doc) {
+    //var app = this;
+    const insertions = [];
+    const deletions = [];
+    const fields = Object.keys(form);
+    const oldProfileData = JSON.parse(localStorage.getItem('oldProfileData')) || {};
+    console.log("#{#{#{#{#{#{#{#{#{#{#{TRANSFORM}}}}}}}}}}}")
+    console.log(fields)
+    // We need to split out into three code paths here:
+    // 1. There is an old value and a new value. This is the update path
+    // 2. There is no old value and a new value. This is the insert path
+    // 3. There is an old value and no new value. Ths is the delete path
+    // These are separate codepaths because the system needs to know what to do in each case
+    fields.map(field => {
+
+      let predicate = this.VCARD(this.getFieldName(field));
+      let subject = this.getUriForField(field, me);
+      let why = doc;
+
+      let fieldValue = this.getFieldValue(form, field);
+      let oldFieldValue = this.getOldFieldValue(field, oldProfileData);
+console.log("COMPARAISON : ",field, fieldValue, oldFieldValue)
+      // if there's no existing home phone number or email address, we need to add one, then add the link for hasTelephone or hasEmail
+if (field == "address" || field == "phone" || field == "image"){
+  console.log (field," non traitée")
+//  break;
+}else
+
+
+      if(!oldFieldValue && fieldValue && (field === 'phone' || field==='email')) {
+        console.log("ADD ", field, fieldValue)
+        this.addNewLinkedField(field, insertions, predicate, fieldValue, why, me);
+      } else {
+
+        //Add a value to be updated
+        if (oldProfileData[field] && form[field] && oldFieldValue != fieldValue){// && !form.controls[field].pristine) {
+          console.log("UPDATE : ",form[field], oldFieldValue, fieldValue)
+          deletions.push($rdf.st(subject, predicate, oldFieldValue, why));
+          insertions.push($rdf.st(subject, predicate, fieldValue, why));
+        }
+
+        //Add a value to be deleted
+        else if (oldProfileData[field] && !form[field]){// && !form.controls[field].pristine) {
+          console.log("DELETE : ",oldProfileData[field], oldFieldValue)
+          deletions.push($rdf.st(subject, predicate, oldFieldValue, why));
+        }
+
+        //Add a value to be inserted
+        else if (!oldProfileData[field] && form[field]){// && !form.controls[field].pristine) {
+          console.log("INSERT : ",form[field], fieldValue)
+          insertions.push($rdf.st(subject, predicate, fieldValue, why));
+        }
+      }
+    });
+
+    return {
+      insertions: insertions,
+      deletions: deletions
+    };
+  };
+
+  addNewLinkedField(field, insertions, predicate, fieldValue, why, me) {
+    //Generate a new ID. This id can be anything but needs to be unique.
+    let newId = field + ':' + Date.now();
+
+    //Get a new subject, using the new ID
+    let newSubject = $rdf.sym(this.session.webId.split('#')[0] + '#' + newId);
+
+    //Set new predicate, based on email or phone fields
+    let newPredicate = field === 'phone' ? $rdf.sym(this.VCARD('hasTelephone')) : $rdf.sym(this.VCARD('hasEmail'));
+
+    //Add new phone or email to the pod
+    insertions.push($rdf.st(newSubject, predicate, fieldValue, why));
+
+    //Set the type (defaults to Home/Personal for now) and insert it into the pod as well
+    //Todo: Make this dynamic
+    let type = field === 'phone' ? $rdf.literal('Home') : $rdf.literal('Personal');
+    insertions.push($rdf.st(newSubject, this.VCARD('type'), type, why));
+
+    //Add a link in #me to the email/phone number (by id)
+    insertions.push($rdf.st(me, newPredicate, newSubject, why));
+  }
+
+  getUriForField(field, me) {
+    let uriString;
+    let uri;
+
+    switch(field) {
+      case 'phone':
+      uriString = this.getValueFromVcard('hasTelephone');
+      if(uriString) {
+        uri = $rdf.sym(uriString);
+      }
+      break;
+      case 'email':
+      uriString = this.getValueFromVcard('hasEmail');
+      if(uriString) {
+        uri = $rdf.sym(uriString);
+      }
+      break;
+      default:
+      uri = me;
+      break;
+    }
+
+    return uri;
+  }
+
+  /**
+  * Extracts the value of a field of a NgForm and converts it to a $rdf.NamedNode
+  * @param {NgForm} form
+  * @param {string} field The name of the field that is going to be extracted from the form
+  * @return {RdfNamedNode}
+  */
+  getFieldValue(form, field) {
+    let fieldValue;
+
+    if(!form[field]) {
+      return;
+    }
+
+    switch(field) {
+      case 'phone':
+      fieldValue = $rdf.sym('tel:+'+form[field]);
+      break;
+      case 'email':
+      fieldValue = $rdf.sym('mailto:'+form[field]);
+      break;
+      default:
+      fieldValue = form[field];
+      break;
+    }
+
+    return fieldValue;
+  }
+
+  getOldFieldValue(field, oldProfile){
+    let oldValue;
+
+    if(!oldProfile || !oldProfile[field]) {
+      return;
+    }
+
+    switch(field) {
+      case 'phone':
+      oldValue = $rdf.sym('tel:+'+oldProfile[field]);
+      break;
+      case 'email':
+      oldValue = $rdf.sym('mailto:'+oldProfile[field]);
+      break;
+      default:
+      oldValue = oldProfile[field];
+      break;
+    }
+
+    return oldValue;
+  }
+
+  getFieldName(field) {
+    switch (field) {
+      case 'company':
+      return 'organization-name';
+      case 'phone':
+      case 'email':
+      return 'value';
+      default:
+      return field;
+    }
+  }
+
+
 
   // Loads the profile from the rdf service and handles the response
   async loadProfile() {
@@ -382,7 +608,7 @@ class SpoggySolid extends LitElement {
       if (this.profile) {
         console.log(this.profile)
         //  app.profile = profile;
-        //  app.auth.saveOldUserData(profile);
+        app.saveOldUserData(this.profile);
       }
 
       //  this.loadingProfile = false;
@@ -392,7 +618,15 @@ class SpoggySolid extends LitElement {
     }
 
   }
+  saveOldUserData(profile) {
+    if (!localStorage.getItem('oldProfileData')) {
+      localStorage.setItem('oldProfileData', JSON.stringify(profile));
+    }
+  }
 
+  getOldUserData() {
+    return JSON.parse(localStorage.getItem('oldProfileData'));
+  }
 
   async getProfile () {
 
