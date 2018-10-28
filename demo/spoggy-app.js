@@ -126,6 +126,51 @@ class SpoggyApp extends LitElement {
     </td>
     </tr>
 
+
+    <tr>
+    <td>
+    Interaction avec un serveur Solid <br>
+    récupération des infos de https://smag0.solid.community/
+    <br>
+    https://smag0.solid.community/profile/card#me<paper-button raised @click="${(e) =>  this._default_solid(e)}">set Smag0 as default</paper-button>
+    <br>
+    <p>
+    <paper-button id="solidLogin" raised @click="${(e) =>  this._solid_login(e)}">Login</paper-button>
+    </p>
+    <p>
+    <paper-button id="solidLogout" raised @click="${(e) =>  this._solid_logout(e)}">Logout</paper-button>
+    </p>
+    <paper-input
+    id="inputSolid"
+    label="Solid Profil :"
+    value="https://smag0.solid.community/">
+    </paper-input>
+    <paper-button raised @click="${(e) =>  this._load_solid(e)}">View</paper-button>
+
+    <dl id="viewer">
+    <dt>Full name</dt>
+    <dd id="fullName"></dd>
+    <dt>Friends</dt>
+    <dd>
+    <ul id="friendsLi"></ul>
+    </dd>
+    <dt>Friends Error</dt>
+    <dd>
+    <ul id="friendsError"></ul>
+    </dd>
+
+
+    </dl>
+
+    </td>
+    <td>
+    <spoggy-graph id="solidgraph" name="solidgraph" source="https://smag0.solid.community/profile/card#me" >
+    Chargement du graphe
+    </spoggy-graph>
+    </td>
+    </tr>
+
+
     </table>
     <spoggy-catchurl></spoggy-catchurl>
     `;
@@ -146,6 +191,7 @@ class SpoggyApp extends LitElement {
   constructor() {
     super();
     this.source = "blop";
+
     //  this._testRdfExt();
     //  this._testN3Parser();
     //  this._testRdfFetch();
@@ -167,18 +213,152 @@ class SpoggyApp extends LitElement {
 
     this._inputRdf = this.shadowRoot.getElementById('inputRdf');
     this._ajaxRdf = this.shadowRoot.getElementById('requestRdf');
+
+    //SOLID
+    //  this.FOAF = $rdf.Namespace('http://xmlns.com/foaf/0.1/');
+
+    this._solidLoginBtn = this.shadowRoot.getElementById('solidLogin');
+    this._solidLogoutBtn = this.shadowRoot.getElementById('solidLogout');
+    this._inputSolid = this.shadowRoot.getElementById('inputSolid');
+    this._fullName = this.shadowRoot.getElementById('fullName');
+    this._friends = this.shadowRoot.getElementById('friendsLi');
+    this._friendsError = this.shadowRoot.getElementById('friendsError');
+
+  //  console.log(solid)
+    solid.auth.trackSession(session => {
+      const loggedIn = !!session;
+
+
+      if (loggedIn){
+        this._solidLoginBtn.style.visibility="hidden";
+        this._solidLogoutBtn.style.visibility="visible";
+        this._inputSolid.value = session.webId;
+        console.log(session.webId)
+      }else{
+        this._solidLoginBtn.style.visibility="visible";
+        this._solidLogoutBtn.style.visibility="hidden";
+        this._inputSolid.value = "";
+      }
+    });
+
   }
 
 
-/*
-update(visresults){
+  /*
+  update(visresults){
   console.log("updated", this.visresults);
 }
 update(visresults){
-  super.update(this.visresults);
-  console.log("updated", this.visresults);
+super.update(this.visresults);
+console.log("updated", this.visresults);
 }*/
 
+_solid_login(e){
+  console.log(solid);
+  // Log the user in and out on click
+  const popupUri = 'popup.html';
+  solid.auth.popupLogin({ popupUri });
+  // Update components to match the user's login status
+}
+
+_solid_logout(e){
+  solid.auth.logout();
+  this._clearSolidResults();
+}
+
+_clearSolidResults(){
+  while( this._friends.firstChild ){
+    this._friends.removeChild( this._friends.firstChild );
+  }
+  while( this._friendsError.firstChild ){
+    this._friendsError.removeChild( this._friendsError.firstChild );
+  }
+}
+
+
+_default_solid(e){
+  this._inputSolid.value ="https://smag0.solid.community/profile/card#me";
+}
+
+_load_solid(e){
+  var app = this;
+  const FOAF = $rdf.Namespace('http://xmlns.com/foaf/0.1/');
+
+  // Set up a local data store and associated data fetcher
+  const store = $rdf.graph();
+  const fetcher = new $rdf.Fetcher(store);
+//  console.log(fetcher)
+  // Load the person's data into the store
+  const person = this._inputSolid.value ;
+
+  fetcher.load(person).then(function(result){
+  //  console.log(result)
+    // Display their details
+    const fullName = store.any($rdf.sym(person), FOAF('name'));
+    console.log(fullName)
+    app._fullName.textContent  = fullName && fullName.value;
+    //console.log(app._fullName)
+    //  $('#fullName').text(fullName && fullName.value);
+    // Display their friends
+    const friends = store.each($rdf.sym(person), FOAF('knows'));
+    //  console.log(friends)
+    app._clearSolidResults();
+
+friends.forEach(async (friend) => {
+  var node = document.createElement("LI");
+  try{
+    await fetcher.load(friend);
+    const fullName = store.any(friend, FOAF('name'));
+    console.log(fullName, friend.value)
+
+    var createA = document.createElement('paper-button');
+    createA.setAttribute("raised", "");
+    var createAText = document.createTextNode(fullName && fullName.value || friend.value);
+    //createA.setAttribute('href', '');
+    createA.onclick = function() {
+      app._inputSolid.value = friend.value;
+      app._load_solid(this)
+    };
+    createA.appendChild(createAText);
+    node.appendChild(createA);
+    app._friends.appendChild(node)
+
+  } catch (e) {
+  //  console.log(e); // 30
+    var createA = document.createElement('a');
+    var createAText = document.createTextNode("error parsing : "+ friend.value);
+    createA.appendChild(createAText);
+    createA.setAttribute('href', friend.value);
+    node.appendChild(createA);
+    app._friendsError.appendChild(node)
+  }
+
+});
+
+
+
+
+
+
+})
+
+/*
+
+
+
+// Display their friends
+const friends = store.each($rdf.sym(person), FOAF('knows'));
+$('#friends').empty();
+friends.forEach(async (friend) => {
+await fetcher.load(friend);
+const fullName = store.any(friend, FOAF('name'));
+$('#friends').append(
+$('<li>').append(
+$('<a>').text(fullName && fullName.value || friend.value)
+.click(() => $('#profile').val(friend.value))
+.click(loadProfile)));
+});*/
+}
 
 
 _load_json(e){

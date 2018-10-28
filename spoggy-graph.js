@@ -1,5 +1,5 @@
 import {LitElement, html} from '@polymer/lit-element';
-import 'vis/dist/vis.js';
+import {Network} from 'vis/dist/vis.js';
 import  'evejs/dist/eve.min.js';
 import { GraphAgent } from './agents/GraphAgent.js'
 import { ttl2Xml, rdf2Xml } from './lib/import-export.js'
