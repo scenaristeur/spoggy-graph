@@ -2,6 +2,17 @@
 tested with Firefox 62 on windows & Linux Mint for the moment (there is a pb betweeen evejs & chrome)
  with nodejs 10 & 11
 
+
+# Prerequis
+- installer nodejs LTS (long terme support)
+https://nodejs.org/fr/download/
+- installer Polymer en global
+```
+npm i  -g polymer-cli
+```
+
+# Recupérer le code source
+
 ```
 git clone https://github.com/scenaristeur/spoggy-graph.git
 cd spoggy-graph
@@ -75,3 +86,6 @@ doc http://linkeddata.github.io/rdflib.js/doc/UpdateManager.htm
 
 # ethereum decentralized
 voir aussi https://github.com/llSourcell/Your_First_Decentralized_Application
+
+# History
+02-11-2018 : fixed evejs , hypertimer & distribus vulnerabilities
