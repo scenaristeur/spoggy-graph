@@ -76,6 +76,9 @@ GraphAgent.prototype.receive = function(from, message) {
     console.log(message.data)
     this.app.populateVis(message.data);
     break;
+    case 'importJson':
+    this.app.importJson();
+    break;
     case 'importFromParam':
     console.log(message.params)
     this.app.importFromParam(message.params);
