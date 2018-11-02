@@ -36,12 +36,72 @@ class SpoggyApp extends LitElement {
 
 
     SPOGGY3-GRAPH <a href="https://github.com/scenaristeur/spoggy-graph" target="_blank">github</a><br>
-    <a href="./solid.html">Solid test</a>
+
 
     <table border="1">
     <th>
     DEMO SPOGGY-GRAPH
     </th>
+
+    <tr>
+    <td>
+    <h2>Methode Facile</h2>
+    <ul>
+    <li>Comment ajouter un <b>noeud</b> ?
+    <ol>
+    <li>Clique sur le bouton "Edit"</li>
+    <li>Clique sur le bouton "Add Node"</li>
+    <li>Clique n'importe dans un espace vide du graphe</li>
+    <li>Une nouvelle fenêtre s'ouvre. Dans la case Label, donne un nom à ton noeud</li>
+    <li>Clique sur le bouton "save"</li>
+    </ol>
+    </li>
+    </ul>
+
+    <ul>
+    <li>Comment ajouter un <b>lien</b> ?
+    <ol>
+    <li>Clique sur le bouton "Edit"</li>
+    <li>Clique sur le bouton "Add Edge"</li>
+    <li>Clique sur un noeud du graphe et garde le bouton de ta souris appuyé</li>
+    <li>Glisse ta souris vers un autre noeud, une fois ce noeud atteint, relâche le bouton de ta souris</li>
+    <li>Un nouvelle fenêtre s'ouvre. Dans la case Label, donne un nom à ton lien</li>
+    <li>Clique sur le bouton "save"</li>
+    </ol>
+
+    </li>
+    </ul>
+
+
+
+
+    </td>
+    <td>
+
+
+    <spoggy-graph id="novicegraph" name="novicegraph" >
+    Chargement du graphe
+    </spoggy-graph>
+    </td>
+    </tr>
+
+
+    <tr>
+    <td>
+    <h2>Methode Expert</h2>
+<ol>
+<li>Repère le champ de saisie où il est écrit '3 mots, une virgule et Entrée'</li>
+<li>Acet endroit saisis 3 mots suivis d'une virgule et appuie sur la touche "Entrée"<br>
+exemple : Chat mange Souris, + Entrée
+<ol>
+
+    </td>
+    <td>
+    <spoggy-graph id="expertgraph" name="expertgraph"  >
+    Chargement du graphe
+    </spoggy-graph>
+    </td>
+    </tr>
 
 
     <tr>
@@ -134,6 +194,7 @@ class SpoggyApp extends LitElement {
 
     </table>
 
+EN TEST  :   <a href="./solid.html" target="_blank">Solid test</a>
 
 
     <spoggy-catchurl></spoggy-catchurl>

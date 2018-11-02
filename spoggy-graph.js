@@ -13,6 +13,8 @@ import '@polymer/paper-dialog-behavior/paper-dialog-behavior.js';
 import '@polymer/paper-dialog-behavior/paper-dialog-behavior.js';
 import '@polymer/paper-checkbox/paper-checkbox.js';
 import '@polymer/paper-input/paper-textarea.js';
+import '@polymer/neon-animation/animations/scale-up-animation.js';
+import '@polymer/neon-animation/animations/fade-out-animation.js';
 
 class SpoggyGraph extends LitElement {
 
@@ -35,13 +37,13 @@ class SpoggyGraph extends LitElement {
       font-size:28px;
     }
     #node-popUp {
-      display:none;
-      position:absolute;
+      /*  display:none; */
+    /*  position:absolute; */
       /*  top:350px;
       left:170px; */
-      z-index:299;
-      width:250px;
-      height:120px;
+    /*  z-index:299; */
+      /*width:250px;
+      height:120px;*/
       background-color: #f9f9f9;
       border-style:solid;
       border-width:3px;
@@ -50,13 +52,13 @@ class SpoggyGraph extends LitElement {
       text-align: center;
     }
     #edge-popUp {
-      display:none;
-      position:absolute;
+      /*  display:none;*/
+    /*  position:absolute; */
       /*    top:350px;
       left:170px; */
-      z-index:299;
-      width:250px;
-      height:90px;
+    /*  z-index:299; */
+      /*width:250px;
+      height:90px;*/
       background-color: #f9f9f9;
       border-style:solid;
       border-width:3px;
@@ -272,7 +274,13 @@ class SpoggyGraph extends LitElement {
     }
     </style>
 
-    <paper-dialog id="import-popUp" class="popup" backdrop transition="core-transition-bottom"><!--  on-iron-overlay-opened="_openImport"
+    <paper-dialog
+    entry-animation="scale-up-animation"
+    exit-animation="fade-out-animation"
+    id="import-popUp"
+    class="popup"
+    backdrop
+    transition="core-transition-bottom"><!--  on-iron-overlay-opened="_openImport"
     on-iron-overlay-closed="_closeImport"-->
     <div horizontal start-justified start layout >
     <core-icon icon="thumb-up" style="height: 150px; width:150px;color: #0D578B;"></core-icon>
@@ -302,7 +310,12 @@ class SpoggyGraph extends LitElement {
     </div>
     </paper-dialog>
 
-    <paper-dialog id="export-ttl" class="popup" backdrop transition="core-transition-bottom"  iron-overlay-opened="fillTextToSave"><!-- on-iron-overlay-opened="_myOpenFunction"
+    <paper-dialog
+    id="export-ttl"
+    entry-animation="scale-up-animation"
+    exit-animation="fade-out-animation"
+    class="popup"
+    backdrop transition="core-transition-bottom"  iron-overlay-opened="fillTextToSave"><!-- on-iron-overlay-opened="_myOpenFunction"
     on-iron-overlay-closed="_myClosedFunction" -->
     <h2  style="margin: 0;color: #0D578B;"> Export au format turtle (RDF)
     <!--<paper-button ontap="_pageAide">?</paper-button>-->
@@ -327,7 +340,9 @@ class SpoggyGraph extends LitElement {
     </paper-dialog>
 
 
-    <div id="node-popUp">
+    <paper-dialog id="node-popUp"
+     entry-animation="scale-up-animation"
+    exit-animation="fade-out-animation">
     <span id="node-operation">node</span> <br>
     <table style="margin:auto;">
     <tr>
@@ -339,9 +354,11 @@ class SpoggyGraph extends LitElement {
     </table>
     <input type="button" value="save" id="node-saveButton" />
     <input type="button" value="cancel" id="node-cancelButton" />
-    </div>
+    </paper-dialog>
 
-    <div id="edge-popUp">
+    <paper-dialog id="edge-popUp"
+    entry-animation="scale-up-animation"
+    exit-animation="fade-out-animation">
     <span id="edge-operation">edge</span> <br>
     <table style="margin:auto;">
     <tr>
@@ -349,8 +366,8 @@ class SpoggyGraph extends LitElement {
     </tr></table>
     <input type="button" value="save" id="edge-saveButton" />
     <input type="button" value="cancel" id="edge-cancelButton" />
-    </div>
-    <br>
+    </paper-dialog>
+
 
     <spoggy-input destinataire="${this.id}"></spoggy-input>
     <div id="mynetwork"></div>
@@ -420,20 +437,20 @@ firstUpdated() {
 
   // create an array with nodes
   var nodes = new vis.DataSet([
-    {id: 1, label: 'Node 1'},
-    {id: 2, label: 'Node 22'},
-    {id: 3, label: 'Node 3'},
-    {id: 4, label: 'Node 4'},
-    {id: 5, label: 'Node 5'}
+    {id: "node1", label: 'Node 1'},
+    {id: "node2", label: 'Node 2'},
+    {id: "node3", label: 'Node 3'},
+    {id: "node4", label: 'Node 4'},
+    {id: "node5", label: 'Node 5'}
   ]);
 
   // create an array with edges
   var edges = new vis.DataSet([
-    {from: 1, to: 3, arrows:'to', label: "type"},
-    {from: 1, to: 2, arrows:'to', label: "subClassOf"},
-    {from: 2, to: 4, arrows:'to', label: "partOf"},
-    {from: 2, to: 5, arrows:'to', label: "first"},
-    {from: 3, to: 3, arrows:'to', label: "mange"}
+    {from: "node1", to: "node3", arrows:'to', label: "type"},
+    {from: "node1", to: "node2", arrows:'to', label: "subClassOf"},
+    {from: "node2", to: "node4", arrows:'to', label: "partOf"},
+    {from: "node2", to: "node5", arrows:'to', label: "first"},
+    {from: "node3", to: "node3", arrows:'to', label: "mange"}
   ]);
 
 
@@ -464,6 +481,7 @@ firstUpdated() {
         addNode: function (data, callback) {
           // filling in the popup DOM elements
           app.shadowRoot.getElementById('node-operation').innerHTML = "Add Node";
+          data.label =""
           app.editNode(data, app.clearNodePopUp, callback);
         },
         editNode: function (data, callback) {
@@ -504,14 +522,14 @@ firstUpdated() {
     this.shadowRoot.getElementById('node-label').value = data.label ;
     this.shadowRoot.getElementById('node-saveButton').onclick = this.saveNodeData.bind(this, data, callback);
     this.shadowRoot.getElementById('node-cancelButton').onclick = cancelAction.bind(this, callback);
-    this.shadowRoot.getElementById('node-popUp').style.display = 'block';
+    this.shadowRoot.getElementById('node-popUp').open();
   }
 
   // Callback passed as parameter is ignored
   clearNodePopUp() {
     this.shadowRoot.getElementById('node-saveButton').onclick = null;
     this.shadowRoot.getElementById('node-cancelButton').onclick = null;
-    this.shadowRoot.getElementById('node-popUp').style.display = 'none';
+    this.shadowRoot.getElementById('node-popUp').close();
   }
 
   cancelNodeEdit(callback) {
@@ -530,13 +548,13 @@ firstUpdated() {
     this.shadowRoot.getElementById('edge-label').value = data.label || "";
     this.shadowRoot.getElementById('edge-saveButton').onclick = this.saveEdgeData.bind(this, data, callback);
     this.shadowRoot.getElementById('edge-cancelButton').onclick = this.cancelEdgeEdit.bind(this,callback);
-    this.shadowRoot.getElementById('edge-popUp').style.display = 'block';
+    this.shadowRoot.getElementById('edge-popUp').open();
   }
 
   clearEdgePopUp() {
     this.shadowRoot.getElementById('edge-saveButton').onclick = null;
     this.shadowRoot.getElementById('edge-cancelButton').onclick = null;
-    this.shadowRoot.getElementById('edge-popUp').style.display = 'none';
+    this.shadowRoot.getElementById('edge-popUp').close();
   }
 
   cancelEdgeEdit(callback) {
@@ -793,8 +811,9 @@ for (var l = 0; l < listeComplementaire.length; l++) {
 console.log(output)
 
 //this.agentGraph.send('agentDialogs', {type:'exportTtl', ttlData : output});
-this.shadowRoot.getElementById('export-ttl').style.display = 'block';
-this.shadowRoot.getElementById('inputTextToSave').value = output
+this.shadowRoot.getElementById('export-ttl').open();
+this.shadowRoot.getElementById('inputTextToSave').value = output;
+this.shadowRoot.getElementById('inputFileNameToSaveAs').value = "spoggy-"+ Date.now();
 }
 
 uniq_fast(a) {
@@ -814,7 +833,7 @@ uniq_fast(a) {
 
 importJson(){
   console.log("import JSON");
-  this.shadowRoot.getElementById('import-popUp').style.display = 'block';
+  this.shadowRoot.getElementById('import-popUp').open();
 }
 
 handleFileSelected(evt) {
@@ -836,7 +855,7 @@ handleFileSelected(evt) {
   // Code to execute after that
   evt.target.files = null;
   //app.$.importPopUp.toggle();
-  this.shadowRoot.getElementById('import-popUp').style.display = 'none';
+  this.shadowRoot.getElementById('import-popUp').close();
   //  app.$.dialogs.$.inputMessage.value = '';
 }
 
@@ -966,6 +985,7 @@ validRdf(network, string){
 saveTextAsFile(){
   console.log("SAVE")
   var textToWrite="";
+
   var fileNameToSaveAs="";
   var textFileAsBlob="";
   var extension="ttl";
@@ -1043,6 +1063,7 @@ setTimeout(function(){
   document.body.removeChild(downloadLink);
   window.URL.revokeObjectURL(downloadLink);
 }, 100);
+this.shadowRoot.getElementById('export-ttl').close();
 }
 
 
