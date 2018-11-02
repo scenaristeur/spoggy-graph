@@ -12,6 +12,7 @@ import '@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js';
 import '@polymer/paper-dialog-behavior/paper-dialog-behavior.js';
 import '@polymer/paper-dialog-behavior/paper-dialog-behavior.js';
 import '@polymer/paper-checkbox/paper-checkbox.js';
+import '@polymer/paper-input/paper-textarea.js';
 
 class SpoggyGraph extends LitElement {
 
@@ -73,6 +74,13 @@ class SpoggyGraph extends LitElement {
       border-width:3px;
       border-color: #5394ed;
       padding:1px;
+
+
+    }
+
+
+    paper-textarea {
+      max-height: 70vh;
     }
 
     div.vis-network div.vis-manipulation {
@@ -294,6 +302,30 @@ class SpoggyGraph extends LitElement {
     </div>
     </paper-dialog>
 
+    <paper-dialog id="export-ttl" class="popup" backdrop transition="core-transition-bottom"  iron-overlay-opened="fillTextToSave"><!-- on-iron-overlay-opened="_myOpenFunction"
+    on-iron-overlay-closed="_myClosedFunction" -->
+    <h2  style="margin: 0;color: #0D578B;"> Export au format turtle (RDF)
+    <!--<paper-button ontap="_pageAide">?</paper-button>-->
+    <!--  <paper-button dialog-dismiss raised>X</paper-button> -->
+    <paper-icon-button icon="clear" dialog-dismiss></paper-icon-button></h2>
+
+    <paper-dialog-scrollable>
+    <paper-textarea id="inputTextToSave" rows="10" maxRows="15"></paper-textarea>
+    </paper-dialog-scrollable>
+
+    <div style="padding-top:10px" horizontal end-justified layout self-stretch>
+
+    <!--<paper-button raised on-tap="creer" dialog-confirm>Créer</paper-button>
+    <paper-button  dialog-dismiss raised>Fermer</paper-button>-->
+    <paper-input id="inputFileNameToSaveAs" label="Nom du fichier à sauvegarder (.ttl)"></paper-input>
+    <paper-button raised @click="${() =>  this.saveTextAsFile()}"  dialog-confirm>Exporter le fichier Ttl</paper-button>
+    <br>
+    </div>
+
+
+
+    </paper-dialog>
+
 
     <div id="node-popUp">
     <span id="node-operation">node</span> <br>
@@ -397,11 +429,11 @@ firstUpdated() {
 
   // create an array with edges
   var edges = new vis.DataSet([
-    {from: 1, to: 3, arrows:'to'},
-    {from: 1, to: 2, arrows:'to'},
-    {from: 2, to: 4, arrows:'to'},
-    {from: 2, to: 5, arrows:'to'},
-    {from: 3, to: 3, arrows:'to'}
+    {from: 1, to: 3, arrows:'to', label: "type"},
+    {from: 1, to: 2, arrows:'to', label: "subClassOf"},
+    {from: 2, to: 4, arrows:'to', label: "partOf"},
+    {from: 2, to: 5, arrows:'to', label: "first"},
+    {from: 3, to: 3, arrows:'to', label: "mange"}
   ]);
 
 
@@ -760,7 +792,9 @@ for (var l = 0; l < listeComplementaire.length; l++) {
 //this.$.dialogs.$.popupTtl.toggle();
 console.log(output)
 
-this.agentGraph.send('agentDialogs', {type:'exportTtl', ttlData : output});
+//this.agentGraph.send('agentDialogs', {type:'exportTtl', ttlData : output});
+this.shadowRoot.getElementById('export-ttl').style.display = 'block';
+this.shadowRoot.getElementById('inputTextToSave').value = output
 }
 
 uniq_fast(a) {
@@ -785,7 +819,7 @@ importJson(){
 
 handleFileSelected(evt) {
   var app = this;
-var partageImport = this.shadowRoot.getElementById('partageImport').checked;
+  var partageImport = this.shadowRoot.getElementById('partageImport').checked;
   var remplaceNetwork = this.shadowRoot.getElementById('remplaceNetwork').checked;
 
   var files = evt.target.files; // FileList object
@@ -795,8 +829,8 @@ var partageImport = this.shadowRoot.getElementById('partageImport').checked;
     // Code to execute for every file selected
     var fichier = files[i];
     console.log(fichier);
-  //  this.agentDialogs.send('agentGraph', {type: 'decortiqueFile', fichier: fichier, remplaceNetwork: remplaceNetwork});
-        this.decortiqueFile(fichier,  remplaceNetwork); //this.network,
+    //  this.agentDialogs.send('agentGraph', {type: 'decortiqueFile', fichier: fichier, remplaceNetwork: remplaceNetwork});
+    this.decortiqueFile(fichier,  remplaceNetwork); //this.network,
   }
   console.log("fin");
   // Code to execute after that
@@ -905,6 +939,110 @@ decortiqueFile(fichier, remplaceNetwork){
   console.log(fichier);
 
   reader.readAsText(fichier);
+}
+
+validRdf(network, string){
+  // A REVOIR
+  console.log(network.body.data.nodes.get(string));
+  console.log("nettoyage "+ string);
+  // transformer le noeud en noeud rdf (resource ou literal)
+  // ajouter la construction du noeud, son uri, prefix, localname, type...
+  var valid = {};
+  valid.type = "uri";
+  if (string.indexOf(" ") !== -1){
+    valid.type = "literal";
+  }else{
+    /*
+    replaceAll(string, " ","_");
+    replaceAll(string, "","_");
+    replaceAll(string, ",","_");
+    replaceAll(string, ";","_");
+    replaceAll(string, " ","_");*/
+  }
+
+  return string;
+}
+
+saveTextAsFile(){
+  console.log("SAVE")
+  var textToWrite="";
+  var fileNameToSaveAs="";
+  var textFileAsBlob="";
+  var extension="ttl";
+  var nomFichier="";
+  var data = this.shadowRoot.getElementById('inputTextToSave').value;
+  console.log(data);
+  if((typeof data != "undefined")&& (data.length>0)){
+    textToWrite=data;
+  }else{
+    textToWrite = this.shadowRoot.getElementById('inputTextToSave').value;    //textToWrite = document.getElementById("inputTextToSave").value;
+  }
+  if ((typeof nomFichier != "undefined") && (nomFichier.length>0)){
+    fileNameToSaveAs = nomFichier+"."+extension;
+  }else{
+    fileNameToSaveAs = this.shadowRoot.getElementById('inputFileNameToSaveAs').value+"."+extension; // fileNameToSaveAs = document.getElementById("inputFileNameToSaveAs").value+"."+extension;
+  }
+  if ((typeof extension != "undefined") && (extension.length>0)){
+    switch(extension){
+      case "ttl" :
+      textFileAsBlob = new Blob([textToWrite], {
+        type:
+        'text/turtle'
+      }
+    );
+    break;
+    case "rdf" :
+    //pas implementé pour l'instant
+    textFileAsBlob = new Blob([textToWrite], {
+      type:
+      'application/rdf+xml'
+    }
+  );
+  break;
+  default :
+  console.log("non traite  , extension : "+extension);
+  break;
+}
+}
+console.log(nomFichier+" : "+extension);
+var downloadLink = document.createElement("a");
+downloadLink.download = fileNameToSaveAs;
+downloadLink.innerHTML = "Download File";
+//console.log(window.URL);
+//if (window.URL != null)
+if(navigator.userAgent.indexOf("Chrome") != -1)
+{
+  // Chrome allows the link to be clicked
+  // without actually adding it to the DOM.
+  console.log("CHROME");
+  downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+} else
+{
+  // Firefox requires the link to be added to the DOM
+  // before it can be clicked.
+  console.log("FF");
+  downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+  downloadLink.target="_blank";
+  //downloadLink.onclick = destroyClickedElement;
+  //downloadLink.onclick = window.URL.revokeObjectURL(downloadLink);
+  downloadLink.style.display = "none";
+  document.body.appendChild(downloadLink);
+  //console.log(this.$.popupTtl);
+}
+console.log(downloadLink);
+/*downloadLink.click();*/
+/* creation d'un event car download.click() ne fonctionne pas sous Firefox */
+var event = document.createEvent("MouseEvents");
+event.initMouseEvent(
+  "click", true, false, window, 0, 0, 0, 0, 0
+  , false, false, false, false, 0, null
+);
+downloadLink.dispatchEvent(event);
+var app = this;
+setTimeout(function(){
+  document.body.removeChild(downloadLink);
+  window.URL.revokeObjectURL(downloadLink);
+}, 100);
 }
 
 
