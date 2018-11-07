@@ -18,6 +18,7 @@
     "@polymer/polymer": "^3.0.5",
     "@types/vis": "^4.21.8",
     "evejs": "github:scenaristeur/evejs#develop",
+    "fs": "0.0.1-security",
     "vis": "^4.21.0",
     "web-animations-js": "^2.3.1"
   },
