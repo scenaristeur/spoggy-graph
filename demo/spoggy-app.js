@@ -8,6 +8,7 @@ import { AppAgent } from '../agents/AppAgent.js';
 import "../spoggy-catchurl.js";
 import "../spoggy-graph.js";
 import "../spoggy-fuseki.js";
+import "../spoggy-modele.js";
 
 
 
@@ -35,14 +36,13 @@ class SpoggyApp extends LitElement {
     </iron-ajax>
 
 
-    SPOGGY-GRAPH <a href="https://github.com/scenaristeur/spoggy-graph" target="_blank">github</a><br>
 
-
-    <table border="1">
+    <table border="1" style="width:100%">
     <th>
-    DEMO SPOGGY-GRAPH
+    SPOGGY-GRAPH
     </th>
-    <th style="min-width:50%">
+    <th style="width:50%">
+    <a href="https://github.com/scenaristeur/spoggy-graph" target="_blank">Github Spoggy-Graph</a>
     </th>
 
     <tr>
@@ -82,11 +82,28 @@ class SpoggyApp extends LitElement {
     <tr>
     <td>
     <h2>Methode Expert</h2>
-<ol>
-<li>Repère le champ de saisie où il est écrit '3 mots, une virgule et Entrée'</li>
-<li>A cet endroit saisis 3 mots suivis d'une virgule et appuie sur la touche "Entrée"<br>
-exemple : Chat mange Souris, + Entrée
-<ol>
+    <ol>
+    <li>Repère le champ de saisie où il est écrit '3 mots, une virgule et Entrée'</li>
+    <li>A cet endroit saisis 3 mots suivis d'une virgule et appuie sur la touche "Entrée"<br>
+    exemple : Chat mange Souris, + Entrée
+    </ol>
+
+    <h2> Import / Export</h2>
+    <span>Maintenant que tu es un expert de <a href="https://github.com/scenaristeur/spoggy-graph" target="_blank">Spoggy-Graph</a>, tu vas avoir envie de garder tes graphes.<br> Dans le champ de saisie que tu viens d'utiliser, tu peux saisir : </span>
+    <ul>
+    <li>
+    <b>/e </b> pour exporter un graphe
+    </li>
+    <li>
+    <b>/i </b> pour importer un graphe
+    </li>
+    <li>
+    <b>/t </b> pour exporter un graphe au format <a href="https://fr.wikipedia.org/wiki/Turtle_(syntaxe)" target="_blank">Turtle / RDF</a>
+    </li>
+    <li>
+    <b>/n </b> pour repartir sur un nouveau graphe vide
+    </li>
+    </ul>
 
     </td>
     <td>
@@ -163,7 +180,8 @@ exemple : Chat mange Souris, + Entrée
     <tr>
     <td>
     Chargement d'un fichier source au format RDF / turtle / owl.. :<br>
-    copie de https://protege.stanford.edu/ontologies/pizza/pizza.owl
+    copie de https://protege.stanford.edu/ontologies/pizza/pizza.owl<br>
+    un fichier rdf : http://www.iro.umontreal.ca/~lapalme/ift6282/RDF/IFT6282_0.rdf (a telecharger / pb cors)
     <paper-input
     id="inputRdf"
     label="Fichier source au format RDF / turtle / owl.. :"
@@ -175,22 +193,43 @@ exemple : Chat mange Souris, + Entrée
 
     </td>
     <td>
-    <spoggy-graph id="rdfgraph" name="jsongraph" source="https://protege.stanford.edu/ontologies/pizza/pizza.owl" >
+    <spoggy-graph id="rdfgraph" name="rdfgraph" source="https://protege.stanford.edu/ontologies/pizza/pizza.owl" >
     Chargement du graphe
     </spoggy-graph>
     </td>
     </tr>
 
+    <tr>
+    <td>
+    TEST avec rdflib / rdf-ext
+    </td>
+    <td>
+    <spoggy-graph id="rdflibgraph" name="rdflibgraph" source="https://protege.stanford.edu/ontologies/pizza/pizza.owl" >
+    Chargement du graphe
+    </spoggy-graph>
+    </td>
+    </tr>
 
+    <tr>
+    <td>
+
+    EN TEST  :   <a href="./solid.html" target="_blank">Solid test</a>
+    </td>
+    <td>
+
+    </td>
+    </tr>
 
 
 
     </table>
 
-EN TEST  :   <a href="./solid.html" target="_blank">Solid test</a>
+
 
 
     <spoggy-catchurl></spoggy-catchurl>
+
+    <spoggy-modele></spoggy-modele>
     `;
   }
 

@@ -1067,6 +1067,71 @@ setTimeout(function(){
 this.shadowRoot.getElementById('export-ttl').close();
 }
 
+newGraph(){
+  //network.body.data.nodes.clear();
+  //network.body.data.edges.clear();
+  let network = this.network;
+
+  var graphname = prompt("Comment nommer ce nouveau graphe ?", "Spoggy-Graph_"+Date.now());
+  var nodeName = {
+    label: graphname,
+    shape: "star",
+    color: "green",
+    type: "node"
+  };
+  var nodeGraph = {
+    label: "Graph",
+    /*    shape: "star",
+    color: "red",*/
+    type: "node"
+  };
+  network.body.data.nodes.clear();
+  network.body.data.edges.clear();
+  var nodes = network.body.data.nodes.add([nodeName, nodeGraph]);
+
+  var edge = {
+    from: nodes[0],
+    to: nodes[1],
+    arrows: "to",
+    label: "type"
+  }
+  network.body.data.edges.add(edge);
+  /* seulement en cas de synchro, mais difficile de newgrapher en synchro ?
+  var action = {};
+  action.type = "newNode";
+  action.data = nodeName;
+  this.addAction(action);
+
+  action = {};
+  action.type = "newNode";
+  action.data = nodeGraph;
+  this.addAction(action);
+
+  action = {};
+  action.type = "newEdge";
+  action.data = edge;
+  this.addAction(action);
+
+  action = {};
+  action.type = "changeGraph";
+  action.data = graphname;
+  this.addAction(action);
+  if(app.socket != undefined){
+  app.socket.graph = graphname;
+  console.log(app.socket);
+}
+*/
+
+//app.socket.emit('newGraph', graphname);
+/*
+//document.getElementById('importPopUp').style.display = 'block';
+app.$.importPopUp.style.display = 'block';
+
+var filepicker = app.$.filepicker;
+filepicker.addEventListener('change', handleFileSelect.bind(app), false);
+filepicker.network = network;*/
+}
+
 
 
 }

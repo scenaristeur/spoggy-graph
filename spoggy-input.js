@@ -216,6 +216,7 @@ catchCommande(commande){
       //  this.newGraph(this.network, this);
       //  this.agentInput.send('agentGraph', {type: 'newGraph'})
       //  this.agentInput.send('agentSparqlUpdate', {type: "newGraph"});
+      this.agentInput.send(this.destinataire, {type: 'newGraph'})
       break;
       case "/b":
       console.log("connection a la base levelgraph");
