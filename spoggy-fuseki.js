@@ -19,7 +19,7 @@ import { LitElement, html } from '@polymer/lit-element';
 import '@polymer/iron-ajax/iron-ajax.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
-import 'web-animations-js/web-animations-next-lite.min.js';
+//import 'web-animations-js/web-animations-next.min.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
 

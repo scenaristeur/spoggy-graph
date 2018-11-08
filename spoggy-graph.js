@@ -13,6 +13,7 @@ import '@polymer/paper-dialog-behavior/paper-dialog-behavior.js';
 import '@polymer/paper-dialog-behavior/paper-dialog-behavior.js';
 import '@polymer/paper-checkbox/paper-checkbox.js';
 import '@polymer/paper-input/paper-textarea.js';
+//import 'web-animations-js/web-animations.min.js';
 import '@polymer/neon-animation/animations/scale-up-animation.js';
 import '@polymer/neon-animation/animations/fade-out-animation.js';
 
