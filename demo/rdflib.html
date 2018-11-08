@@ -1,0 +1,37 @@
+<html>
+
+<style>
+.milieu {
+  margin-top: 50vh; /* poussé de la moitié de hauteur de viewport */
+  transform: translateY(-50%); /* tiré de la moitié de sa propre hauteur */
+  margin-left: 50vw; /* poussé de la moitié de largeur de viewport */
+  transform: translateX(-50%); /* tiré de la moitié de sa propre largeur */
+}
+</style>
+<!--<script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>-->
+<!--<script src="node_modules/evejs/dist/eve.custom.js"></script>-->
+
+
+<spoggy-rdflib>
+  <div class="milieu">
+    Spoggy
+    <br>
+    <br>
+    Chargement
+    <!--<spoggy-spinner></spoggy-spinner>-->
+  </div>
+
+</spoggy-rdflib>
+<script src="../lib/jquery.js"></script>
+
+<!--<script type="module" src="./spoggy-spinner.js"></script>-->
+<script src="../lib/rdflib.min.js"></script>
+<!--<script src="../lib/rdf-ext-all-latest.min.js"></script>-->
+<script src="../lib/solid-auth-client.bundle.js"></script>
+<!-- IMPORT WEB ANIMATION Pour PaperDropdown https://stackoverflow.com/questions/52193786/polymer-3-0-uncaught-reference-error-on-paper-drop-down-click -->
+<script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+<script src="../node_modules/web-animations-js/web-animations-next.min.js"></script>
+<script src="../node_modules/vis/dist/vis.js"></script>
+<script type="module" src="../spoggy-rdflib.js"></script>
+
+</html>

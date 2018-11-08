@@ -199,21 +199,14 @@ class SpoggyApp extends LitElement {
     </td>
     </tr>
 
-    <tr>
-    <td>
-    TEST avec rdflib / rdf-ext
-    </td>
-    <td>
-    <spoggy-graph id="rdflibgraph" name="rdflibgraph" source="https://protege.stanford.edu/ontologies/pizza/pizza.owl" >
-    Chargement du graphe
-    </spoggy-graph>
-    </td>
-    </tr>
+
 
     <tr>
     <td>
 
-    EN TEST  :   <a href="./solid.html" target="_blank">Solid test</a>
+    EN TEST  : <br>
+    <a href="./solid.html" target="_blank">Solid test</a><br>
+    <a href="./rdflib.html" target="_blank">RDFLIB test</a>
     </td>
     <td>
 
