@@ -437,6 +437,20 @@ class SpoggyGraph extends LitElement {
 <!--</div>-->
 </paper-dialog>
 
+<paper-dialog id="edge-popUp"> <!--  backdrop transition="core-transition-bottom" -->
+  <!--  <div horizontal start-justified start layout > -->
+  <!--  <core-icon icon="thumb-up" style="height: 150px; width:150px;color: #0D578B;"></core-icon>-->
+  <div style="padding-left:20px" vertical start-justified start layout wrap>
+    <h2 id="edge-operation" style="margin: 0;color: #0D578B;">Ajouter ou modifier un lien</h2>
+    <paper-input id="edge-label" label="Nom du lien" autofocus></paper-input>
+    <div style="padding-top:10px" horizontal end-justified layout self-stretch>
+      <paper-button id="edge-saveButton"  on-tap="saveEdgeData" dialog-confirm raised>ok</paper-button>
+      <paper-button id="edge-cancelButton" dialog-dismiss raised>Annuler</paper-button>
+    </div>
+  </div>
+  <!--  </div> -->
+</paper-dialog>
+
 
     <!--<paper-dialog id="node-popUp"
      entry-animation="scale-up-animation"
