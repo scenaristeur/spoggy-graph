@@ -1,8 +1,3 @@
-
-
-//VOIR https://github.com/Collaborne/paper-collapse-item
-
-
 import {LitElement, html} from '@polymer/lit-element';
 //import {Network} from 'vis/dist/vis.js';
 //import  'vis/dist/vis.js';
@@ -15,19 +10,8 @@ import "./spoggy-input.js";
 import '@polymer/paper-dialog/paper-dialog.js';
 import '@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js';
 import '@polymer/paper-dialog-behavior/paper-dialog-behavior.js';
+import '@polymer/paper-dialog-behavior/paper-dialog-behavior.js';
 import '@polymer/paper-checkbox/paper-checkbox.js';
-import '@polymer/paper-slider/paper-slider.js';
-
-import '@polymer/iron-selector/iron-selector.js';
-//  <link rel="lazy-import" group="lazy" href="../../bower_components/paper-checkbox/paper-checkbox.html">
-  import '@polymer/paper-icon-button/paper-icon-button.js';
-  import 'paper-collapse-item/paper-collapse-item.js';
-//  import '@polymer/iron-collapse-button/iron-collapse-button.js';
-//  <link rel="lazy-import" group="lazy"  href="../../bower_components/color-picker/color-picker.html">
-//  <link rel="lazy-import" group="lazy"  href="../../bower_components/color-picker/color-element.html">
-//import '@polymer/paper-dropdown-input/paper-dropdown-input.js';
-import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
-
 import '@polymer/paper-input/paper-textarea.js';
 //import 'web-animations-js/web-animations.min.js';
 import '@polymer/neon-animation/animations/scale-up-animation.js';
@@ -66,7 +50,7 @@ class SpoggyGraph extends LitElement {
       border-width:3px;
       border-color: #5394ed;
       padding:10px;
-    /*  text-align: center; */
+      text-align: center;
     }
     #edge-popUp {
       /*  display:none;*/
@@ -81,7 +65,7 @@ class SpoggyGraph extends LitElement {
       border-width:3px;
       border-color: #5394ed;
       padding:10px;
-    /*  text-align: center; */
+      text-align: center;
     }
     .popup {
       position: absolute;
@@ -357,88 +341,7 @@ class SpoggyGraph extends LitElement {
     </paper-dialog>
 
 
-    <paper-dialog id="node-popUp"  backdrop transition="core-transition-bottom"  >
-      <!--  <div horizontal start-justified start layout > -->
-      <!--  <core-icon icon="thumb-up" style="height: 150px; width:150px;color: #0D578B;"></core-icon> -->
-      <div style="padding-left:20px" vertical start-justified start layout wrap>
-        <h2 id="node-operation" style="margin: 0;color: #0D578B;">Ajouter ou modifier un noeud</h2>
-        <paper-input id="node-label" label="Nom du noeud" autofocus ></paper-input>
-
-
-
-        <!--<paper-dialog-scrollable id="scrollNode">-->
-          <paper-collapse-item header="Forme">
-          <!--  <h3 slot="collapse-trigger" style="margin: 0;color: #0D578B;">Forme</h3>-->
-          <!--  <div slot="collapse-content">-->
-              <!--  <fieldset>
-              <legend>Forme</legend> -->
-              <iron-selector id="shapeSelector" attr-for-selected="name" selected="{{selectedShape}}" selected-attribute="checked">
-                <div>Label interne</div>
-                <paper-checkbox name="ellipse">Ellipse</paper-checkbox>
-                <paper-checkbox name="circle">Cercle</paper-checkbox>
-                <paper-checkbox name="database">Database</paper-checkbox>
-                <paper-checkbox name="box">Box</paper-checkbox>
-                <paper-checkbox name="text">Texte</paper-checkbox>
-                <hr>
-                <div>Label externe</div>
-                <paper-checkbox name="diamond">Diamant</paper-checkbox>
-                <paper-checkbox name="star">Etoile</paper-checkbox>
-                <paper-checkbox name="triangle">Triangle</paper-checkbox>
-                <paper-checkbox name="triangleDown">Triangle inverse</paper-checkbox>
-                <paper-checkbox name="square">Carré</paper-checkbox>
-                <paper-checkbox name="image" >Image</paper-checkbox>
-                <paper-checkbox name="circularImage" >Image Circulaire</paper-checkbox>
-              </iron-selector>
-              <div hidden$="[[shapeIsImage(selectedShape)]]">
-                <paper-input id="imgUrl" label="Url de l'image (http://...)"></paper-input>
-              </div>
-              <!--  </fieldset>-->
-            <!--</div>-->
-          </paper-collapse-item>
-          <paper-collapse-item header="Couleur">
-          <!--  <h3 slot="collapse-trigger" style="margin: 0;color: #0D578B;">Couleur</h3>-->
-            <!--<div slot="collapse-content">-->
-              <!--  <fieldset>
-              <legend>Couleur</legend>-->
-              <color-picker  id="colorpicker" native value="{{colorValue}}"  position="right"></color-picker>
-              <!--  </fieldset> -->
-            <!--</div>-->
-          </paper-collapse-item>
-          <!--  <paper-collapse-item>
-          <h3 slot="collapse-trigger" style="margin: 0;color: #0D578B;">Type de noeud</h3>
-          <div slot="collapse-content">
-          nb : ces fonctionnalités sont en cours de developpement :
-          <a href="https://github.com/scenaristeur/heroku-spoggy/projects/1#card-10985683" target="_blank">kanban</a>
-          <iron-selector id="typeSelector" attr-for-selected="name" selected="{{selectedType}}" selected-attribute="checked">
-          <div>Noeuds particuliers</div>
-          <paper-checkbox name="normal">Normal</paper-checkbox>
-          <paper-checkbox name="uri">Uri</paper-checkbox>
-          <paper-checkbox name="database">Database</paper-checkbox>
-          <paper-checkbox name="lien">Lien</paper-checkbox>
-          <paper-checkbox name="video">Video</paper-checkbox>
-          <paper-checkbox name="text">Texte</paper-checkbox>
-          <hr>
-          <div>Noeuds programmatiques</div>
-          <paper-checkbox name="variable">Variable</paper-checkbox>
-          <paper-checkbox name="boucle">Boucle</paper-checkbox>
-          <paper-checkbox name="condition">Condition</paper-checkbox>
-          <paper-checkbox name="fonction">Fonction</paper-checkbox>
-        </iron-selector>
-      </div>
-    </paper-collapse-item>
-  -->
-<!--</paper-dialog-scrollable>-->
-</br>
-<div style="padding-top:10px" horizontal end-justified layout self-stretch>
-  <paper-button id="node-saveButton" dialog-confirm  raised>ok</paper-button>
-  <paper-button id="node-cancelButton"  dialog-dismiss raised>Annuler</paper-button>
-</div>
-</div>
-<!--</div>-->
-</paper-dialog>
-
-
-    <!--<paper-dialog id="node-popUp"
+    <paper-dialog id="node-popUp"
      entry-animation="scale-up-animation"
     exit-animation="fade-out-animation">
     <span id="node-operation">node</span> <br>
@@ -464,7 +367,7 @@ class SpoggyGraph extends LitElement {
     </tr></table>
     <input type="button" value="save" id="edge-saveButton" />
     <input type="button" value="cancel" id="edge-cancelButton" />
-    </paper-dialog>-->
+    </paper-dialog>
 
 
     <spoggy-input destinataire="${this.id}"></spoggy-input>

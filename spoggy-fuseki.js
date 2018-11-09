@@ -144,7 +144,7 @@ class SpoggyFuseki extends LitElement {
       this._inputFusekiDataset = this.shadowRoot.getElementById('inputFusekiDataset');
       this._inputFusekiQuery = this.shadowRoot.getElementById('inputFusekiQuery');
       this.fusekiElem = this.shadowRoot.getElementById('fusekiElem');
-      this._fuseki_ping(this.endpoint)
+    //  this._fuseki_ping(this.endpoint)
     }
 
     _endpointChanged(e){
