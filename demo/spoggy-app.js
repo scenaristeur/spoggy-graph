@@ -206,6 +206,9 @@ class SpoggyApp extends LitElement {
 
     EN TEST  : <br>
     <a href="./solid.html" target="_blank">Solid test</a><br>
+
+  <a href="./solidbins.html" target="_blank">Solid BINS test</a><br>
+
     <a href="./rdflib.html" target="_blank">RDFLIB test</a>
     </td>
     <td>

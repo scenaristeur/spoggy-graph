@@ -1,3 +1,10 @@
+//https://github.com/solid/solid-tutorial-intro
+//http://rhiaro.github.io/sws/
+//https://github.com/solid/solid-tutorial-rdflib.js
+//https://github.com/solid/solid-platform
+//https://github.com/solid/solid-apps
+
+
 import { LitElement, html } from '@polymer/lit-element';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-button/paper-button.js';
@@ -255,6 +262,7 @@ class SpoggySolid extends LitElement {
     Interaction avec un serveur <a href="https://solid.mit.edu/" target="_blank">Solid</a> <br>
     récupération des infos de https://smag0.solid.community/<br>
     <small> doc http://linkeddata.github.io/rdflib.js/doc/UpdateManager.html</small>
+    <br> https://solid.inrupt.com/docs/manipulating-ld-with-rdflib
     <br>
     https://smag0.solid.community/profile/card#me<paper-button raised @click="${(e) =>  this._default_solid(e)}">set Smag0 as default</paper-button>
     <br>
