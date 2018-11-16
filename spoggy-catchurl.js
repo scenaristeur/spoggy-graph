@@ -21,7 +21,7 @@ import { LitElement, html } from '@polymer/lit-element';
 
 // These are the shared styles needed by this element.
 //import { ButtonSharedStyles } from './../button-shared-styles.js';
-import  'evejs/dist/eve.custom.js';
+import  '/node_modules/evejs/dist/eve.custom.js';
 import { CatchurlAgent } from './agents/CatchurlAgent.js'
 // This is a reusable element. It is not connected to the store. You can
 // imagine that it could just as well be a third-party element that you

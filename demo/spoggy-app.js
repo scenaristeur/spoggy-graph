@@ -2,7 +2,7 @@ import { LitElement, html } from '@polymer/lit-element';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-ajax/iron-ajax.js';
-import  'evejs/dist/eve.custom.js';
+import  '/node_modules/evejs/dist/eve.custom.js';
 import { AppAgent } from '../agents/AppAgent.js';
 
 import "../spoggy-catchurl.js";

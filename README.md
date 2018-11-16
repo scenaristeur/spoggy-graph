@@ -1,7 +1,7 @@
 # Polymer3 element pour Spoggy3 https://github.com/scenaristeur/spoggy3
 tested with Firefox 62 on windows & Linux Mint for the moment (there is a pb betweeen evejs & chrome)
  with nodejs 10 & 11
- 
+
 
 
 # Prerequis
@@ -12,19 +12,25 @@ https://nodejs.org/fr/download/
 npm i  -g polymer-cli
 ```
 
+
+
 # Recupérer le code source
 
 ```
 git clone https://github.com/scenaristeur/spoggy-graph.git
 cd spoggy-graph
 npm install
-
 ```
 
-# launch DEMO
+# compiler eve.cusom.js
 ```
-polymer serve --open
+cd node_modules/evejs
+npm install -g browserify
+browserify custom.js -o dist/eve.custom.js -s eve
+cd ../../
 ```
+(TODO : voir pour une compilation automatique)
+
 
 # launch DEV Server
 ```

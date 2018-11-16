@@ -6,7 +6,7 @@
 import {LitElement, html} from '@polymer/lit-element';
 //import {Network} from 'vis/dist/vis.js';
 //import  'vis/dist/vis.js';
-import  'evejs/dist/eve.custom.js';
+import  '/node_modules/evejs/dist/eve.custom.js';
 import { GraphAgent } from './agents/GraphAgent.js'
 import { ttl2Xml, rdf2Xml } from './lib/import-export.js'
 import { catchTriplet } from './lib/graphBehavior.js'

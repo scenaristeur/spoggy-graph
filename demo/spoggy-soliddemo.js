@@ -4,7 +4,7 @@ import '@polymer/paper-button/paper-button.js';
 import "../spoggy-solid.js";
 //import  { traiteMessage} from './lib/inputBehavior.js';
 
-import  'evejs/dist/eve.custom.js';
+import  '/node_modules/evejs/dist/eve.custom.js';
 import "../spoggy-graph.js";
 //import { InputAgent } from './agents/InputAgent.js'
 

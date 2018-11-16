@@ -10,7 +10,7 @@ import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-button/paper-button.js';
 //import  { traiteMessage} from './lib/inputBehavior.js';
 
-import  'evejs/dist/eve.custom.js';
+import  '/node_modules/evejs/dist/eve.custom.js';
 import { SolidAgent } from './agents/SolidAgent.js'
 
 class SpoggySolid extends LitElement {

@@ -24,7 +24,7 @@ import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
 
 
-import  'evejs/dist/eve.custom.js';
+import  '/node_modules/evejs/dist/eve.custom.js';
 import { FusekiAgent } from './agents/FusekiAgent.js'
 
 class SpoggyFuseki extends LitElement {
