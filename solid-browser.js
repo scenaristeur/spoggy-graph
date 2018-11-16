@@ -18,6 +18,8 @@ import { LitElement, html } from '@polymer/lit-element';
 import '@polymer/paper-card/paper-card.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-listbox/paper-listbox.js';
+import '@polymer/paper-item/paper-item.js';
 // These are the elements needed by this element.
 //import { plusIcon, minusIcon } from './../my-icons.js';
 
@@ -30,6 +32,7 @@ import  '/node_modules/evejs/dist/eve.custom.js';
 // got from someone else.
 class SolidBrowser extends LitElement {
   render() {
+    const { folders, files, historique } = this;
     //  const { _test } = this;
     return html`
 
@@ -117,41 +120,53 @@ Files / Fichiers <br>
 </tr>
 <tr>
 <td>
+f long ${folders.length} ..
+<paper-listbox  selected="${folder}">
+${folders.map((i) => html `
+  <paper-item raised @click="${(e) =>  this.updatePublicFolder(i)}">
+  ${i}
+  </paper-item>
+  `)}
+  </paper-listbox>
+  <ul id="foldersList"></ul>
+  </td>
+  <td>
+  <ul id="filesList"></ul>
+  </td>
+  </tr>
+  </table>
+  </div>
 
-<ul id="foldersList"></ul>
-</td>
-<td>
-<ul id="filesList"></ul>
-</td>
-</tr>
-</table>
-</div>
+  </div>
 
-</div>
-
-<div class="card-actions">
-<paper-button>Share</paper-button>
-<paper-button>Explore!</paper-button>
-</div>
+  <div class="card-actions">
+  <paper-button>Share</paper-button>
+  <paper-button>Explore!</paper-button>
+  </div>
 
 
-</paper-card>
+  </paper-card>
 
 
 
-`;
+  `;
 }
 
 static get properties() { return {
-  _test: String
+  _test: String,
+  folders: {type: Array}
 }};
 
 constructor() {
   super();
+  this.folders = new Array();
+  this.files = new Array();
+  this.historique = new Array();
   this._test = "Login to browse your 'Public' Folder / Connectez-vous pour parcourir votre dossier public"
 }
 
 firstUpdated(){
+
   this._podInput = this.shadowRoot.getElementById('podInput');
   this._nameInput = this.shadowRoot.getElementById('nameInput');
   this._solidLoginBtn = this.shadowRoot.getElementById('solidLogin');
@@ -163,12 +178,11 @@ firstUpdated(){
   this.FOAF = new $rdf.Namespace('http://xmlns.com/foaf/0.1/');
   this.LDP = new $rdf.Namespace('http://www.w3.org/ns/ldp#>');
   this.VCARD = new $rdf.Namespace('http://www.w3.org/2006/vcard/ns#');
+  this.STAT = new $rdf.Namespace('http://www.w3.org/ns/posix/stat#')
 
 
-  var sess, webIdRoot, currentFolder, fetcher, updater;
-  var folders = [];
-  var files = [];
-  var historique = [];
+  //var sess, webIdRoot, currentFolder, fetcher, updater;
+
   //  console.log("update");
   //  console.log("eve",eve);
   //  this.agentCatchurl = new CatchurlAgent('agentCatchurl', this);
@@ -237,27 +251,151 @@ _updateProfile(){
   console.log("PROFILE UPDATE")
   var app = this;
   this._fetcher.load(this._profile).then(response => {
-    console.log(response.responseText)
-    console.log("ME : "+app._me)
+    //  console.log(response.responseText)
     let name = app._store.any(app._me, this.VCARD('fn'));
-    console.log("Loaded "+name);
     app._nameInput.value = name;
   }, err => {
     console.log("Load failed" +  err);
   });
 }
 
-updatePublicFolder(folder){
+
+
+async updatePublicFolder(folder){
+  var app = this;
   if (folder == undefined){
     folder = this._publicFolder;
   }
+
+//  this.folders = [];
+  //this.files = [];
+  //await app.requestUpdate();
+  var myArray = [];
+  this.folders = Object.assign([], ...myArray);;
+  //Object.assign([], ...myArray);
+
+
+  console.log(app.folders )
+  app.shadowRoot.getElementById("foldersList").innerHTML = ""
+  console.log(app.shadowRoot.getElementById("foldersList").innerHTML )
+  app.shadowRoot.getElementById("filesList").innerHTML = ""
+  app.shadowRoot.getElementById("historiqueUl").innerHTML = ""
+  /*var histfolder = folder.replace(webIdRoot, '');
+  console.log("HISTORY : "+histfolder)*/
+  if (this.historique.length>3){this.historique.shift();}
+  this.historique.push(folder);
+  this.historique = [...this.historique, folder]
+  console.log("WEBIDROOT "+this._webIdRoot)
+  if (parent != this._webIdRoot){
+    partemp =folder;
+    var  partemp = partemp.split('/');
+    partemp.pop();
+    partemp.pop();
+    parent = partemp.join("/")+"/";
+  }
+  console.log("PARENT : "+parent)
+  var liParent = document.createElement("li");
+  liParent.addEventListener("click", function(){updatePublicFolder(parent)});
+  var text = document.createTextNode(". . /  " +parent);
+  liParent.appendChild(text);
+  app.shadowRoot.getElementById("foldersList").appendChild(liParent);
 
   console.log("FOLDERS SEARCH ",folder, "WEBIDROOT "+this._webIdRoot )
   console.log("update "+folder)
   console.log(this._loggedIn)
   console.log(this._session.webId)
+  await app._fetcher.load(folder).then(response => {
+    //  console.log(response.responseText)
+    //console.log(fetcher)
+    /*let all = store.match(null, null, null, null);
+    console.log(all)*/
+
+    let sizes = app._store.match(null, app.STAT('size'), null, null);
+    console.log(sizes);
+
+    //  parent = folder.split('/').pop().join("/");
+    //  console.log(parent)
+    /*  var liParent = document.createElement("li");
+    li.addEventListener("click", function(){updatePublicFolder(parent)});
+    var text = document.createTextNode("../ : " +parent);
+    li.appendChild(text);
+    document.getElementById("foldersList").appendChild(liParent);*/
+  //  var foldersTemp = app.folders;
+  //  var filesTemp = app.files;
+    sizes.forEach(function(s){
+      if (s.object.value == '4096'){
+        //  console.log('folder '+s.subject.value);
+        //app.folders.push(s.subject.value);
+        app.folders = [...app.folders, s.subject.value]
+        var li = document.createElement("li");
+        li.addEventListener("click", function(){app.updatePublicFolder(s.subject.value)});
+        var text = document.createTextNode(s.subject.value.replace(app._webIdRoot, ''));
+        li.appendChild(text);
+        app.shadowRoot.getElementById("foldersList").appendChild(li);
+
+      }else{
+        //  console.log('file '+s.subject.value);
+        //app.files.push(s.subject.value);
+        app.files = [...app.files, s.subject.value]
+        var li = document.createElement("li");
+        var text = document.createTextNode(s.subject.value);
+        li.appendChild(text);
+        app.shadowRoot.getElementById("filesList").appendChild(li);
+      }
+    });
+  //  app.folders = foldersTemp;
+    //app.files = filesTemp;
+    //  console.log("Folders: "+folders);
+    //  console.log("Files: "+files);
+    app.historique.forEach(function(h){
+      var li = document.createElement("li");
+      li.addEventListener("click", function(){app.updatePublicFolder(h)});
+      var text = document.createTextNode(h.replace(app._webIdRoot, ''));
+      li.appendChild(text);
+      app.shadowRoot.getElementById("historiqueUl").appendChild(li);
+    });
+    console.log(app.folders)
+//    app.requestUpdate();
+    //  var slides = ["slide 1", "slide 2", "slide 3", "slide 4", "slide 5"]
+    /*  var foList = '<ul>';
+    folders.forEach(function(f) {
+    foList += '<li>'+ f + '</li>';
+  });
+  foList += '</ul>';
+  document.getElementById("foldersList").innerHTML = foList;
+
+  var fiList = '<ul>';
+  files.forEach(function(f) {
+  fiList += '<li>'+ f + '</li>';
+});
+fiList += '</ul>';
+document.getElementById("filesList").innerHTML = fiList;*/
+
+/*let m = store.match(null, RDF('type'), null, null);
+console.log(m)
+let f = store.any(null, LDP('contains'));
+console.log("Loaded M "+f);*/
+//  nameInput.value = name;
+}, err => {
+  console.log("Load failed" +  err);
+});
+
+
+
+
+
+}
+update(folders){
+  super.update()
+  console.log("3UPDATE" )
+  console.log(folders)
 }
 
+updated(folders){
+  super.update()
+  console.log("3UPDATED 3" )
+    console.log(folders)
+}
 
 }
 
