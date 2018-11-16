@@ -2,6 +2,7 @@ import { LitElement, html } from '@polymer/lit-element';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-button/paper-button.js';
 import "../spoggy-solid.js";
+
 //import  { traiteMessage} from './lib/inputBehavior.js';
 
 import  '/node_modules/evejs/dist/eve.custom.js';
@@ -11,7 +12,8 @@ import "../spoggy-graph.js";
 class SpoggySoliddemo extends LitElement {
   render() {
     return html`
-<spoggy-solid></spoggy-solid>
+  
+    <spoggy-solid></spoggy-solid>
 
     `;
   }
@@ -27,7 +29,7 @@ class SpoggySoliddemo extends LitElement {
 
   }
   firstUpdated() {
-  /*  this.name = this.destinataire+"_Input"
+    /*  this.name = this.destinataire+"_Input"
     this.agentInput = new InputAgent(this.name, this);
     console.log(this.agentInput);
     this.agentInput.send('agentApp', {type: 'dispo', name: 'agentInput' });
@@ -42,12 +44,12 @@ class SpoggySoliddemo extends LitElement {
 
   _changed(e){
     console.log(e)
-  /*  console.log(this._input.value , "vers ", this.destinataire)
+    /*  console.log(this._input.value , "vers ", this.destinataire)
     var retour = traiteMessage(this._input.value);
     this._input.value =  retour.inputNew;
     console.log(retour.message);
     this.agentInput.send(this.destinataire, {type: "catchTriplet", triplet:retour.message});
-*/
+    */
   }
 
 

@@ -13,6 +13,8 @@ import '@polymer/paper-button/paper-button.js';
 import  '/node_modules/evejs/dist/eve.custom.js';
 import { SolidAgent } from './agents/SolidAgent.js'
 
+import "/solid-browser.js";
+
 class SpoggySolid extends LitElement {
   render() {
     const { fn, phone, role, email, company, address, profile } = this;
@@ -255,6 +257,9 @@ class SpoggySolid extends LitElement {
     </div>
 
 
+  <solid-browser>test browser</solid-browser>
+
+
     <table border="1">
 
     <tr>
@@ -274,8 +279,9 @@ class SpoggySolid extends LitElement {
     <paper-button raised @click="${(e) =>  this._update_solid(e)}">test update</paper-button>
 
     <dl id="viewer">
-    <dt>Full name</dt> Role : ${role}
+    <dt>Full name</dt>
     <dd id="fullName"></dd>
+    Role : ${role}
     <dt>Friends</dt>
     <dd>
     <ul id="friendsLi"></ul>
@@ -358,7 +364,7 @@ class SpoggySolid extends LitElement {
         console.log(session.webId)
         this.session = session;
         // Update components to match the user's login status
-        this.FOAF = $rdf.Namespace('http://xmlns.com/foaf/0.1/');
+      //  this.FOAF = $rdf.Namespace('http://xmlns.com/foaf/0.1/');
 
         // Set up a local data store and associated data fetcher
         this.store = $rdf.graph();
@@ -392,7 +398,7 @@ class SpoggySolid extends LitElement {
     //  if (!this.cardForm.invalid) {
     try {
       this.updateProfile(this.profile);
-    //  localStorage.setItem('oldProfileData', JSON.stringify(this.profile));
+      //  localStorage.setItem('oldProfileData', JSON.stringify(this.profile));
     } catch (err) {
       console.log(`Error: ${err}`);
     }
@@ -453,12 +459,12 @@ class SpoggySolid extends LitElement {
 
       let fieldValue = this.getFieldValue(form, field);
       let oldFieldValue = this.getOldFieldValue(field, oldProfileData);
-console.log("COMPARAISON : ",field, fieldValue, oldFieldValue)
+      console.log("COMPARAISON : ",field, fieldValue, oldFieldValue)
       // if there's no existing home phone number or email address, we need to add one, then add the link for hasTelephone or hasEmail
-if (field == "address" || field == "phone" || field == "image"){
-  console.log (field," non traitée")
-//  break;
-}else
+      if (field == "address" || field == "phone" || field == "image"){
+        console.log (field," non traitée")
+        //  break;
+      }else
 
 
       if(!oldFieldValue && fieldValue && (field === 'phone' || field==='email')) {
@@ -713,6 +719,7 @@ _update_solid(e){
 }
 
 _getinfos_solid(e){
+  var app = this;
   //https://solid.inrupt.com/docs/writing-solid-apps-with-angular
   //https://github.com/Inrupt-inc/generator-solid-angular/blob/master/generators/app/templates/src/app/services/rdf.service.ts
   const VCARD = $rdf.Namespace('http://www.w3.org/2006/vcard/ns#');
@@ -723,6 +730,7 @@ _getinfos_solid(e){
 
   this.fetcher.load(person).then(function(result){
     console.log(result)
+    console.log(result.responseText)
     // Display their details
     const fullName = app.store.any($rdf.sym(person), app.FOAF('name'));
     console.log(fullName)
@@ -730,6 +738,12 @@ _getinfos_solid(e){
     //console.log(app._fullName)
     //  $('#fullName').text(fullName && fullName.value);
     // Display their friends
+
+    const role = app.store.any($rdf.sym(person), app.VCARD('role'));
+    console.log(role.value)
+    app.role = role.value
+
+
     const friends = app.store.each($rdf.sym(person), app.FOAF('knows'));
     console.log(friends)
   })
