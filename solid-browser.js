@@ -238,7 +238,7 @@ login(){
   console.log(solid);
   // Log the user in and out on click
   const popupUri = 'popup.html';
-  solid.auth.popupLogin({ popupUri });
+  solid.auth.popupLogin({ popupUri });
 }
 
 logout(){
@@ -263,6 +263,10 @@ _updateProfile(){
 
 async updatePublicFolder(folder){
   var app = this;
+  // reinit _store & _fletcher
+  // Set up a local data store and associated data fetcher
+  this._store = $rdf.graph();
+  this._fetcher = new $rdf.Fetcher(this._store);
   if (folder == undefined){
     folder = this._publicFolder;
   }
