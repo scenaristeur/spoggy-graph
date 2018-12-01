@@ -20,8 +20,8 @@ import '@polymer/paper-slider/paper-slider.js';
 
 import '@polymer/iron-selector/iron-selector.js';
 //  <link rel="lazy-import" group="lazy" href="../../bower_components/paper-checkbox/paper-checkbox.html">
-  import '@polymer/paper-icon-button/paper-icon-button.js';
-  import 'paper-collapse-item/paper-collapse-item.js';
+import '@polymer/paper-icon-button/paper-icon-button.js';
+import 'paper-collapse-item/paper-collapse-item.js';
 //  import '@polymer/iron-collapse-button/iron-collapse-button.js';
 //  <link rel="lazy-import" group="lazy"  href="../../bower_components/color-picker/color-picker.html">
 //  <link rel="lazy-import" group="lazy"  href="../../bower_components/color-picker/color-element.html">
@@ -55,10 +55,10 @@ class SpoggyGraph extends LitElement {
     }
     #node-popUp {
       /*  display:none; */
-    /*  position:absolute; */
+      /*  position:absolute; */
       /*  top:350px;
       left:170px; */
-    /*  z-index:299; */
+      /*  z-index:299; */
       /*width:250px;
       height:120px;*/
       background-color: #f9f9f9;
@@ -66,14 +66,14 @@ class SpoggyGraph extends LitElement {
       border-width:3px;
       border-color: #5394ed;
       padding:10px;
-    /*  text-align: center; */
+      /*  text-align: center; */
     }
     #edge-popUp {
       /*  display:none;*/
-    /*  position:absolute; */
+      /*  position:absolute; */
       /*    top:350px;
       left:170px; */
-    /*  z-index:299; */
+      /*  z-index:299; */
       /*width:250px;
       height:90px;*/
       background-color: #f9f9f9;
@@ -81,7 +81,7 @@ class SpoggyGraph extends LitElement {
       border-width:3px;
       border-color: #5394ed;
       padding:10px;
-    /*  text-align: center; */
+      /*  text-align: center; */
     }
     .popup {
       position: absolute;
@@ -303,14 +303,13 @@ class SpoggyGraph extends LitElement {
     <core-icon icon="thumb-up" style="height: 150px; width:150px;color: #0D578B;"></core-icon>
     <div style="padding-left:20px" vertical start-justified start layout wrap>
     <h2 id="importOperation" style="margin: 0;color: #0D578B;">Import JSON (ou ttl) <paper-icon-button icon="clear" dialog-dismiss></paper-icon-button></h2>
-    <p >
+
     <fieldset>
     <legend>Paramètres</legend>
     <paper-checkbox id="remplaceNetwork">Remplacer Network</paper-checkbox>
     <paper-checkbox id="partageImport" disabled >Partager Import</paper-checkbox>
     </fieldset>
-    </p>
-    <p>
+
     <fieldset>
     <legend>Fichier</legend>
     <input id="filepicker"
@@ -318,7 +317,7 @@ class SpoggyGraph extends LitElement {
     multiple value="Importer"
     @change="${(e) =>  this.handleFileSelected(e)}"></input>
     </fieldset>
-    </p>
+
     <div style="padding-top:10px" horizontal end-justified layout self-stretch>
     <paper-button id="importCancelButton" dialog-dismiss raised>Annuler</paper-button>
     <a href="https://github.com/scenaristeur/heroku-spoggy/tree/master/public/exemple_files" target="_blank"> exemples de fichiers spoggy </a>
@@ -358,102 +357,102 @@ class SpoggyGraph extends LitElement {
 
 
     <paper-dialog id="node-popUp"  backdrop transition="core-transition-bottom"  >
-      <!--  <div horizontal start-justified start layout > -->
-      <!--  <core-icon icon="thumb-up" style="height: 150px; width:150px;color: #0D578B;"></core-icon> -->
-      <div style="padding-left:20px" vertical start-justified start layout wrap>
-        <h2 id="node-operation" style="margin: 0;color: #0D578B;">Ajouter ou modifier un noeud</h2>
-        <paper-input id="node-label" label="Nom du noeud" autofocus ></paper-input>
+    <!--  <div horizontal start-justified start layout > -->
+    <!--  <core-icon icon="thumb-up" style="height: 150px; width:150px;color: #0D578B;"></core-icon> -->
+    <div style="padding-left:20px" vertical start-justified start layout wrap>
+    <h2 id="node-operation" style="margin: 0;color: #0D578B;">Ajouter ou modifier un noeud</h2>
+    <paper-input id="node-label" label="Nom du noeud" autofocus ></paper-input>
 
 
 
-        <!--<paper-dialog-scrollable id="scrollNode">-->
-          <paper-collapse-item header="Forme">
-          <!--  <h3 slot="collapse-trigger" style="margin: 0;color: #0D578B;">Forme</h3>-->
-          <!--  <div slot="collapse-content">-->
-              <!--  <fieldset>
-              <legend>Forme</legend> -->
-              <iron-selector id="shapeSelector" attr-for-selected="name" selected="{{selectedShape}}" selected-attribute="checked">
-                <div>Label interne</div>
-                <paper-checkbox name="ellipse">Ellipse</paper-checkbox>
-                <paper-checkbox name="circle">Cercle</paper-checkbox>
-                <paper-checkbox name="database">Database</paper-checkbox>
-                <paper-checkbox name="box">Box</paper-checkbox>
-                <paper-checkbox name="text">Texte</paper-checkbox>
-                <hr>
-                <div>Label externe</div>
-                <paper-checkbox name="diamond">Diamant</paper-checkbox>
-                <paper-checkbox name="star">Etoile</paper-checkbox>
-                <paper-checkbox name="triangle">Triangle</paper-checkbox>
-                <paper-checkbox name="triangleDown">Triangle inverse</paper-checkbox>
-                <paper-checkbox name="square">Carré</paper-checkbox>
-                <paper-checkbox name="image" >Image</paper-checkbox>
-                <paper-checkbox name="circularImage" >Image Circulaire</paper-checkbox>
-              </iron-selector>
-              <div hidden$="[[shapeIsImage(selectedShape)]]">
-                <paper-input id="imgUrl" label="Url de l'image (http://...)"></paper-input>
-              </div>
-              <!--  </fieldset>-->
-            <!--</div>-->
-          </paper-collapse-item>
-          <paper-collapse-item header="Couleur">
-          <!--  <h3 slot="collapse-trigger" style="margin: 0;color: #0D578B;">Couleur</h3>-->
-            <!--<div slot="collapse-content">-->
-              <!--  <fieldset>
-              <legend>Couleur</legend>-->
-              <color-picker  id="colorpicker" native value="{{colorValue}}"  position="right"></color-picker>
-              <!--  </fieldset> -->
-            <!--</div>-->
-          </paper-collapse-item>
-          <!--  <paper-collapse-item>
-          <h3 slot="collapse-trigger" style="margin: 0;color: #0D578B;">Type de noeud</h3>
-          <div slot="collapse-content">
-          nb : ces fonctionnalités sont en cours de developpement :
-          <a href="https://github.com/scenaristeur/heroku-spoggy/projects/1#card-10985683" target="_blank">kanban</a>
-          <iron-selector id="typeSelector" attr-for-selected="name" selected="{{selectedType}}" selected-attribute="checked">
-          <div>Noeuds particuliers</div>
-          <paper-checkbox name="normal">Normal</paper-checkbox>
-          <paper-checkbox name="uri">Uri</paper-checkbox>
-          <paper-checkbox name="database">Database</paper-checkbox>
-          <paper-checkbox name="lien">Lien</paper-checkbox>
-          <paper-checkbox name="video">Video</paper-checkbox>
-          <paper-checkbox name="text">Texte</paper-checkbox>
-          <hr>
-          <div>Noeuds programmatiques</div>
-          <paper-checkbox name="variable">Variable</paper-checkbox>
-          <paper-checkbox name="boucle">Boucle</paper-checkbox>
-          <paper-checkbox name="condition">Condition</paper-checkbox>
-          <paper-checkbox name="fonction">Fonction</paper-checkbox>
-        </iron-selector>
-      </div>
+    <!--<paper-dialog-scrollable id="scrollNode">-->
+    <paper-collapse-item header="Forme">
+    <!--  <h3 slot="collapse-trigger" style="margin: 0;color: #0D578B;">Forme</h3>-->
+    <!--  <div slot="collapse-content">-->
+    <!--  <fieldset>
+    <legend>Forme</legend> -->
+    <iron-selector id="shapeSelector" attr-for-selected="name" selected="{{selectedShape}}" selected-attribute="checked">
+    <div>Label interne</div>
+    <paper-checkbox name="ellipse">Ellipse</paper-checkbox>
+    <paper-checkbox name="circle">Cercle</paper-checkbox>
+    <paper-checkbox name="database">Database</paper-checkbox>
+    <paper-checkbox name="box">Box</paper-checkbox>
+    <paper-checkbox name="text">Texte</paper-checkbox>
+    <hr>
+    <div>Label externe</div>
+    <paper-checkbox name="diamond">Diamant</paper-checkbox>
+    <paper-checkbox name="star">Etoile</paper-checkbox>
+    <paper-checkbox name="triangle">Triangle</paper-checkbox>
+    <paper-checkbox name="triangleDown">Triangle inverse</paper-checkbox>
+    <paper-checkbox name="square">Carré</paper-checkbox>
+    <paper-checkbox name="image" >Image</paper-checkbox>
+    <paper-checkbox name="circularImage" >Image Circulaire</paper-checkbox>
+    </iron-selector>
+    <div hidden$="[[shapeIsImage(selectedShape)]]">
+    <paper-input id="imgUrl" label="Url de l'image (http://...)"></paper-input>
+    </div>
+    <!--  </fieldset>-->
+    <!--</div>-->
     </paper-collapse-item>
-  -->
-<!--</paper-dialog-scrollable>-->
-</br>
-<div style="padding-top:10px" horizontal end-justified layout self-stretch>
-  <paper-button id="node-saveButton" dialog-confirm  raised>ok</paper-button>
-  <paper-button id="node-cancelButton"  dialog-dismiss raised>Annuler</paper-button>
-</div>
-</div>
-<!--</div>-->
-</paper-dialog>
+    <paper-collapse-item header="Couleur">
+    <!--  <h3 slot="collapse-trigger" style="margin: 0;color: #0D578B;">Couleur</h3>-->
+    <!--<div slot="collapse-content">-->
+    <!--  <fieldset>
+    <legend>Couleur</legend>-->
+    <color-picker  id="colorpicker" native value="{{colorValue}}"  position="right"></color-picker>
+    <!--  </fieldset> -->
+    <!--</div>-->
+    </paper-collapse-item>
+    <!--  <paper-collapse-item>
+    <h3 slot="collapse-trigger" style="margin: 0;color: #0D578B;">Type de noeud</h3>
+    <div slot="collapse-content">
+    nb : ces fonctionnalités sont en cours de developpement :
+    <a href="https://github.com/scenaristeur/heroku-spoggy/projects/1#card-10985683" target="_blank">kanban</a>
+    <iron-selector id="typeSelector" attr-for-selected="name" selected="{{selectedType}}" selected-attribute="checked">
+    <div>Noeuds particuliers</div>
+    <paper-checkbox name="normal">Normal</paper-checkbox>
+    <paper-checkbox name="uri">Uri</paper-checkbox>
+    <paper-checkbox name="database">Database</paper-checkbox>
+    <paper-checkbox name="lien">Lien</paper-checkbox>
+    <paper-checkbox name="video">Video</paper-checkbox>
+    <paper-checkbox name="text">Texte</paper-checkbox>
+    <hr>
+    <div>Noeuds programmatiques</div>
+    <paper-checkbox name="variable">Variable</paper-checkbox>
+    <paper-checkbox name="boucle">Boucle</paper-checkbox>
+    <paper-checkbox name="condition">Condition</paper-checkbox>
+    <paper-checkbox name="fonction">Fonction</paper-checkbox>
+    </iron-selector>
+    </div>
+    </paper-collapse-item>
+    -->
+    <!--</paper-dialog-scrollable>-->
+    </br>
+    <div style="padding-top:10px" horizontal end-justified layout self-stretch>
+    <paper-button id="node-saveButton" dialog-confirm  raised>ok</paper-button>
+    <paper-button id="node-cancelButton"  dialog-dismiss raised>Annuler</paper-button>
+    </div>
+    </div>
+    <!--</div>-->
+    </paper-dialog>
 
-<paper-dialog id="edge-popUp"> <!--  backdrop transition="core-transition-bottom" -->
-  <!--  <div horizontal start-justified start layout > -->
-  <!--  <core-icon icon="thumb-up" style="height: 150px; width:150px;color: #0D578B;"></core-icon>-->
-  <div style="padding-left:20px" vertical start-justified start layout wrap>
+    <paper-dialog id="edge-popUp"> <!--  backdrop transition="core-transition-bottom" -->
+    <!--  <div horizontal start-justified start layout > -->
+    <!--  <core-icon icon="thumb-up" style="height: 150px; width:150px;color: #0D578B;"></core-icon>-->
+    <div style="padding-left:20px" vertical start-justified start layout wrap>
     <h2 id="edge-operation" style="margin: 0;color: #0D578B;">Ajouter ou modifier un lien</h2>
     <paper-input id="edge-label" label="Nom du lien" autofocus></paper-input>
     <div style="padding-top:10px" horizontal end-justified layout self-stretch>
-      <paper-button id="edge-saveButton"  on-tap="saveEdgeData" dialog-confirm raised>ok</paper-button>
-      <paper-button id="edge-cancelButton" dialog-dismiss raised>Annuler</paper-button>
+    <paper-button id="edge-saveButton"  on-tap="saveEdgeData" dialog-confirm raised>ok</paper-button>
+    <paper-button id="edge-cancelButton" dialog-dismiss raised>Annuler</paper-button>
     </div>
-  </div>
-  <!--  </div> -->
-</paper-dialog>
+    </div>
+    <!--  </div> -->
+    </paper-dialog>
 
 
     <!--<paper-dialog id="node-popUp"
-     entry-animation="scale-up-animation"
+    entry-animation="scale-up-animation"
     exit-animation="fade-out-animation">
     <span id="node-operation">node</span> <br>
     <table style="margin:auto;">
@@ -482,6 +481,9 @@ class SpoggyGraph extends LitElement {
 
 
     <spoggy-input destinataire="${this.id}"></spoggy-input>
+    url : ${this.url} <br>
+
+    Current : ${this.url}
     <div id="mynetwork"></div>
     `;
   }
@@ -492,21 +494,59 @@ class SpoggyGraph extends LitElement {
       id: {type: String, value:""},
       name: {type: String, value: ""},
       source: {type: String, value: ""},
-      data: {type: Object, value: {}}
+      data: {type: Object, value: {}},
+      current2: {type: Object},
+      current: {type: Object},
+    /*  current:  {type: Object, hasChanged(newVal, oldVal){
+      //  function(newVal, oldVal){
+      console.log(this)
+          console.log("@@@@@@@@@@@@@@@@@@@@@@ \n CHANGED CURRENT : ", newVal)
+          console.log(newVal, oldVal)
+        //  this.currentChanged(newVal,oldVal)
+      //  }
+    }},*/
+      url: {type: String}
     };
   }
 
+_didRender(data){
+  console.log("DID RENDER : ", data)
+  console.log(this.current)
+}
   constructor() {
     super();
+    this.current = {value: {url: "", content:"" }};
+  //  this.current2 = {value: {url: "", content:"" }};
+
+    //  this.current.url="";
 
     //  this.id = "noid";
     //  this.name = "anonymous";
     //  this.source = "nosource";
   }
+currentChanged(current,oldVal){
+  console.log("3CALLBACH")
+  console.log("newVal : ", newVal)
 
-  updated(data){
+  console.log("oldVal : ", oldVal)
+  //this.current2 = newVal
+  // compare newVal and oldVal
+  // return `true` if an update should proceed
+}
+
+  updated(changedProperties){
     //  super.updated(data)
-    console.log("updated", data);
+    //  if (this == undefined){ return;}
+    console.log("updated", changedProperties);
+    if (changedProperties.has("current")) {
+      console.log("\n\n\n\n\n\n\nCurrent : ", this.current)
+      //  this.url = this.current.value.url
+      this.content = this.current.value.content;
+      //  console.log(this.url)
+      console.log(this.content)
+      ttl2Xml(this.content, this.network);
+    }
+
     /*var dataset =  JSON.stringify(eval("(" + this.data + ")"));
     if (dataset != undefined){
     console.log(dataset)
@@ -524,6 +564,7 @@ class SpoggyGraph extends LitElement {
 update(data) {
   super.update(data);
   console.log('update', data);
+
   var dataset =  JSON.stringify(eval("(" + this.data + ")"));
   if (dataset != undefined){
     dataset = JSON.parse(dataset);
@@ -535,7 +576,7 @@ update(data) {
 firstUpdated() {
   //  super.firstUpdated()
   //  console.log("vis",vis);
-
+  console.log("CURRENT : ", this.current)
   console.log('------------name : ', this.name, 'id : ', this.id);
   this.agentGraph = new GraphAgent(this.id, this);
   //  console.log(this.agentGraph);
