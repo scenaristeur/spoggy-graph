@@ -22,7 +22,7 @@
     "@polymer/paper-spinner": "^3.0.1",
     "@polymer/polymer": "^3.0.5",
     "@types/vis": "^4.21.8",
-    "evejs": "github:scenaristeur/evejs#develop",
+    "evejs": "github:scenaristeur/evejs",
     "fs": "0.0.1-security",
     "paper-collapse-item": "^4.0.4",
     "vis": "^4.21.0",
